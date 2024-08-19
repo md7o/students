@@ -16,8 +16,14 @@ const StudentsData = () => {
     }
   };
 
+  const data = [
+    { firstName: 'John', lastName: 'Doe', dob: '01/01/1990', eduLevel: "Bachelor's", gender: 'Male', country: 'USA', city: 'New York', mobileNumber: '123-456-7890', notes: 'Notes about John' },
+    { firstName: 'John', lastName: 'Doe', dob: '01/01/1990', eduLevel: "Bachelor's", gender: 'Male', country: 'USA', city: 'New York', mobileNumber: '123-456-7890', notes: 'Notes about John' },
+    // Add more rows as needed
+  ];
+
   return (
-    <div className="bg-green-100 w-full m-52 rounded-xl p-10 pt-16">
+    <div className="bg-white w-full m-20 rounded-xl p-10 pt-16">
       <div className="flex justify-between items-center ">
         <p className="text-5xl font-semibold">Students' Data</p>
         <div className="flex justify-center items-center bg-primary rounded-2xl text-white text-lg font-light px-6 py-3">
@@ -73,15 +79,45 @@ const StudentsData = () => {
       </div>
       <div className="h-1 w-full bg-[#9999995E]" />
 
-      <div className="flex justify-center items-center bg-primary rounded-lg py-5 mt-5 w-full text-white text-2xl">
-        <p>First Name</p>
-        <p>First Name</p>
-        <p>First Name</p>
-        <p>First Name</p>
-        <p>First Name</p>
-        <p>First Name</p>
-        <p>First Name</p>
-        <p>First Name</p>
+      <div className="flex justify-center items-center gap-12 py-5 mt-5 w-full text-white text-sm">
+      <table className="min-w-full rounded-2xl">
+    
+        <thead className="bg-primary ">
+        <tr >
+          <th className="py-2 px-4 border-b">First Name</th>
+          <th className="py-2 px-4 border-b">Last Name</th>
+          <th className="py-2 px-4 border-b">Date of Birth</th>
+          <th className="py-2 px-4 border-b">Educational level</th>
+          <th className="py-2 px-4 border-b">Gender</th>
+          <th className="py-2 px-4 border-b">Country</th>
+          <th className="py-2 px-4 border-b">City</th>
+          <th className="py-2 px-4 border-b">Mobile Number</th>
+          <th className="py-2 px-4 border-b">Notes</th>
+          <th className="py-2 px-4 border-b">Actions</th>
+        </tr>
+      </thead>
+      {data.map((row, index) => (
+          <tr
+            key={index}
+            style={{ backgroundColor: index % 2 === 0 ? '#ffffff' : '#EEF5F9' }}
+            className="text-black"
+          >
+            <td className="py-2 px-4 border-b">{row.firstName}</td>
+            <td className="py-2 px-4 border-b">{row.lastName}</td>
+            <td className="py-2 px-4 border-b">{row.dob}</td>
+            <td className="py-2 px-4 border-b">{row.eduLevel}</td>
+            <td className="py-2 px-4 border-b">{row.gender}</td>
+            <td className="py-2 px-4 border-b">{row.country}</td>
+            <td className="py-2 px-4 border-b">{row.city}</td>
+            <td className="py-2 px-4 border-b">{row.mobileNumber}</td>
+            <td className="py-2 px-4 border-b">{row.notes}</td>
+            <td className="py-2 px-4 border-b">
+              <button className="text-blue-500">Edit</button>
+              <button className="text-red-500 ml-2">Delete</button>
+            </td>
+          </tr>
+        ))}
+    </table>
       </div>
     </div>
   );
