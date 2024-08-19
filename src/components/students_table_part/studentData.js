@@ -82,7 +82,6 @@ const StudentsData = () => {
         <p>First Name</p>
         <p>First Name</p>
         <p>First Name</p>
-        <p>First Name</p>
       </div>
     </div>
   );
