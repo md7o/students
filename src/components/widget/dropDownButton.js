@@ -24,14 +24,14 @@ const DropDownButton = () => {
       {isOpen && (
         <div className="flex flex-col absolute bg-white border border-gray-200 rounded-md shadow-lg">
           <p
-            className=" px-4 py-2 text-gray-700 hover:bg-gray-200"
+            className=" px-4 py-2 text-gray-700 hover:bg-gray-200 cursor-pointer"
             role="menuitem"
             onClick={() => handleOptionClick("English")}
           >
             English
           </p>
           <p
-            className=" px-4 py-2 text-gray-700 hover:bg-gray-200"
+            className=" px-4 py-2 text-gray-700 hover:bg-gray-200 cursor-pointer"
             role="menuitem"
             onClick={() => handleOptionClick("Arabic")}
           >
