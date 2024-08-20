@@ -15,7 +15,9 @@ const LoginPage = () => {
       </div>
       <div className="flex-1.5 bg-[#2148C0] flex justify-center items-center">
         <div className="bg-white rounded-xl sm:px-24 px-5 py-20 w-full 2.5xl:max-w-6xl 2xl:max-w-3xl md:max-w-xl max-w-3xl ">
-          <p className="text-black :text-6xl text-5xl font-bold mb-20 ">Login</p>
+          <p className="text-black :text-6xl text-5xl font-bold mb-20 ">
+            Login
+          </p>
           <form>
             <div className="mb-8">
               <label

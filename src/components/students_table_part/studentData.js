@@ -9,18 +9,27 @@ import filter from "../../assets/images/filter.png";
 import bin from "../../assets/images/bin.png";
 import pencil from "../../assets/images/pencil.png";
 import "react-datepicker/dist/react-datepicker.css";
+import AppBar from "../../components/students_table_part/appbar";
 
-const StudentsData = () => {
+import { useTranslation } from "react-i18next";
+
+const StudentsData = ({ lang }) => {
+  const { t, i18n } = useTranslation();
+  const [language, setLanguage] = useState("en");
   const [startDate, setStartDate] = useState(new Date());
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [isSearch, setItSearch] = useState("");
+  const [isSearch, setIsSearch] = useState("");
   const [showModal, setShowModal] = useState(false);
   const [eduLevel, setEduLevel] = useState("equal-to");
   const [rowsPerPage, setRowsPerPage] = useState(25);
   const [currentPage, setCurrentPage] = useState(1);
   const datePickerRef = useRef(null);
+
+  const handleLanguageChange = (lang) => {
+    setLanguage(lang);
+  };
 
   const handleChange = (e) => {
     setEduLevel(e.target.value);
@@ -33,7 +42,15 @@ const StudentsData = () => {
     setShowModal(false);
   };
 
-  const searchName = () => {};
+  const searchName = (e) => {
+    setIsSearch(e.target.value);
+  };
+
+  const filteredData = data.filter(
+    (item) =>
+      item.firstName.toLowerCase().includes(isSearch.toLowerCase()) ||
+      item.lastName.toLowerCase().includes(isSearch.toLowerCase())
+  );
 
   const addStudent = async (studentData) => {
     console.log(studentData);
@@ -88,9 +105,11 @@ const StudentsData = () => {
         setLoading(false);
       }
     };
-
+    if (lang) {
+      i18n.changeLanguage(lang);
+    }
     fetchData();
-  }, []);
+  }, [lang, i18n]);
 
   const handleDeleteStudent = async (id) => {
     const url = "https://taxiapp.easybooks.me:8283/Student/Remove";
@@ -146,19 +165,28 @@ const StudentsData = () => {
 
   const indexOfLastStudent = currentPage * rowsPerPage;
   const indexOfFirstStudent = indexOfLastStudent - rowsPerPage;
-  const currentStudents = data.slice(indexOfFirstStudent, indexOfLastStudent);
+  const currentStudents = filteredData.slice(
+    indexOfFirstStudent,
+    indexOfLastStudent
+  );
 
   const pageNumbers = [];
-  for (let i = 1; i <= Math.ceil(data.length / rowsPerPage); i++) {
+  for (let i = 1; i <= Math.ceil(filteredData.length / rowsPerPage); i++) {
     pageNumbers.push(i);
   }
 
   return (
     <div className="bg-white w-full m-10 rounded-xl p-10 ring-2 ring-[#7777771A] drop-shadow-md">
-      <div className="flex justify-between items-center mb-6">
-        <p className="text-3xl font-semibold">Students' Data</p>
+      <div
+        className={`mb-6 ${
+          lang === "en"
+            ? "flex justify-between items-center"
+            : "flex flex-row-reverse justify-between items-center"
+        }`}
+      >
+        <p className="text-3xl font-semibold">{t("Students_Data")}</p>
         <div className="flex items-center bg-primary rounded-2xl text-white text-lg font-light px-6 py-3">
-          <button onClick={handleOpenModal}>Add Student</button>
+          <button onClick={handleOpenModal}>{t("Add_Student")}</button>
           <AddStudents
             showModal={showModal}
             handleCloseModal={handleCloseModal}
@@ -168,10 +196,22 @@ const StudentsData = () => {
         </div>
       </div>
 
-      <div className="flex items-center mb-6 space-x-6">
-        <div className="flex items-center space-x-3">
-          <img src={filter} alt="Filter icon" className="w-6" />
-          <p className="text-primary text-xl">Filter By:</p>
+      <div
+        className={`mb-6 space-x-6 ${
+          lang === "en"
+            ? "flex = items-center"
+            : "flex flex-row-reverse items-center"
+        }`}
+      >
+        <div
+          className={`${
+            lang === "en"
+              ? "flex items-center space-x-3"
+              : "flex flex-row-reverse items-center space-x-3"
+          }`}
+        >
+          <img src={filter} alt="Filter icon" className="w-6 ml-2" />
+          <p className="text-primary text-xl">{t("Filter_By")}</p>
         </div>
         <div className="relative flex-grow max-w-sm">
           <img
@@ -179,13 +219,14 @@ const StudentsData = () => {
             alt="Search icon"
             className="absolute top-1/2 right-3 transform -translate-y-1/2 w-5 h-5"
           />
-          {/* ================== */}
+
           <input
             type="text"
-            placeholder="Search by first name, last name"
+            value={isSearch}
+            onChange={searchName}
+            placeholder={t("search_place_holder")}
             className="w-full py-3 rounded-xl pl-10 pr-16 ring-1 ring-gray-300 focus:ring-black text-xl"
           />
-          {/* =============== */}
         </div>
         <div className="relative bg-white py-2 px-4 rounded-xl ring-1 ring-gray-300 cursor-pointer select-none">
           <div className="flex items-center">
@@ -195,9 +236,9 @@ const StudentsData = () => {
               onChange={handleChange}
               className=" outline-none text-lg text-gray-700 mr-2"
             >
-              <option value="equal-to">Equal to</option>
-              <option value="high-school">Greater than</option>
-              <option value="bachelors">Less than</option>
+              <option value="Equal_to">{t("Equal_to")}</option>
+              <option value="Greater_than">{t("Greater_than")}</option>
+              <option value="Less_than">{t("Less_than")}</option>
             </select>
 
             <div className="h-8 w-0.5 bg-gray-500 opacity-20 mx-4" />
@@ -222,46 +263,53 @@ const StudentsData = () => {
 
       <div className="bg-gray-200 h-1 mb-6" />
 
-      <div className="overflow-x-auto">
-        <div className="bg-gray-100">
-          <div className="bg-blue-500 text-white flex justify-center items-center py-5 mb-5 rounded-lg">
+      <div className="overflow-x-auto ">
+        <div className="bg-gray-100 ">
+          <div
+            className={`bg-blue-500 text-white py-5 mb-5 rounded-lg ${
+              lang === "en"
+                ? "flex justify-center items-center"
+                : "flex flex-row-reverse justify-center items-center"
+            }`}
+          >
             <div className="flex-1 px-6 py-3 text-left text-sm font-medium uppercase tracking-wider">
-              First Name
+              {t("First_Name")}
             </div>
             <div className="flex-1 px-6 py-3 text-left text-sm font-medium uppercase tracking-wider">
-              Last Name
+              {t("Last_Name")}
             </div>
             <div className="flex-1 px-6 py-3 text-left text-sm font-medium uppercase tracking-wider">
-              Date of Birth
+              {t("Date_of_Birth")}
             </div>
             <div className="flex-1 px-6 py-3 text-left text-sm font-medium uppercase tracking-wider">
-              Educational Level
+              {t("Edu_Level")}
             </div>
             <div className="flex-1 px-6 py-3 text-left text-sm font-medium uppercase tracking-wider">
-              Gender
+              {t("Gender")}
             </div>
             <div className="flex-1 px-6 py-3 text-left text-sm font-medium uppercase tracking-wider">
-              Country
+              {t("Country")}
             </div>
             <div className="flex-1 px-6 py-3 text-left text-sm font-medium uppercase tracking-wider">
-              City
+              {t("City")}
             </div>
             <div className="flex-1 px-6 py-3 text-left text-sm font-medium uppercase tracking-wider">
-              Mobile Number
+              {t("Phone")}
             </div>
             <div className="flex-1 px-6 py-3 text-left text-sm font-medium uppercase tracking-wider">
-              Notes
+              {t("Notes")}
             </div>
             <div className="flex-1 px-6 py-3 text-left text-sm font-medium uppercase tracking-wider">
-              Actions
+              {t("Actions")}
             </div>
           </div>
-          <div className="bg-white divide-y divide-gray-200">
+          <div className="bg-white divide-y divide-gray-200 ">
             {currentStudents.map((item) => (
               <div
                 key={item.id}
-                className={`flex rounded-lg text-lg ${
-                  data.indexOf(item) % 2 === 0 ? "bg-white" : "bg-gray-300"
+                className={` rounded-lg text-lg ${
+                  (data.indexOf(item) % 2 === 0 ? "bg-white" : "bg-gray-300",
+                  lang === "en" ? "flex " : "flex flex-row-reverse ")
                 }`}
               >
                 <div className="flex-1 px-6 py-4 text-gray-900">
@@ -312,13 +360,25 @@ const StudentsData = () => {
         </div>
       </div>
       <div className="bg-gray-200 h-1 my-6" />
-      <div className="flex justify-between items-center">
-        <div className="flex items-center ">
+      <div
+        className={` ${
+          lang === "en"
+            ? "flex justify-between items-center"
+            : "flex flex-row-reverse justify-between items-center"
+        }`}
+      >
+        <div
+          className={` ${
+            lang === "en"
+              ? "flex items-center"
+              : "flex flex-row-reverse items-center"
+          }`}
+        >
           <label
             htmlFor="rowsPerPage"
             className="text-lg text-gray-700 mr-2 font-medium opacity-60"
           >
-            Rows per page:
+            {t("Rows_Per_Page")}
           </label>
           <select
             name="rowsPerPage"
@@ -355,7 +415,9 @@ const StudentsData = () => {
           ))}
           <button
             onClick={handleNextPage}
-            disabled={currentPage === Math.ceil(data.length / rowsPerPage)}
+            disabled={
+              currentPage === Math.ceil(filteredData.length / rowsPerPage)
+            }
             className="px-4 py-2 mx-1 rounded-lg bg-gray-200 hover:bg-gray-300 disabled:bg-gray-300"
           >
             &gt;
