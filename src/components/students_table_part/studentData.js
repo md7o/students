@@ -13,18 +13,14 @@ import "react-datepicker/dist/react-datepicker.css";
 const StudentsData = () => {
   const [startDate, setStartDate] = useState(new Date());
   const [data, setData] = useState([]);
-  const [students, setStudents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [isSearch, setItSearch] = useState("");
   const [showModal, setShowModal] = useState(false);
   const [eduLevel, setEduLevel] = useState("equal-to");
+  const [rowsPerPage, setRowsPerPage] = useState(25);
+  const [currentPage, setCurrentPage] = useState(1);
   const datePickerRef = useRef(null);
-
-  // const handleClick = () => {
-  //   if (datePickerRef.current) {
-  //     datePickerRef.current.input.focus(); // Focuses the input of the DatePicker
-  //   }
-  // };
 
   const handleChange = (e) => {
     setEduLevel(e.target.value);
@@ -37,25 +33,7 @@ const StudentsData = () => {
     setShowModal(false);
   };
 
-  // const addStudent = async (studentData) => {
-  //   try {
-  //     const response = await axios.post(
-  //       "https://taxiapp.easybooks.me:8283/Student/Add",
-  //       studentData,
-  //       {
-  //         headers: {
-  //           accept: "*/*",
-  //           Authorization:
-  //             "eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6ImQxYTlmYjdkLTM5MzctNDRmNi0xMzVhLTA4ZGNhY2FjMjNkYyIsImp0aSI6IjAxZGVkY2IyLWY0OWYtNDRhOS05MTNhLWJiMDYwNjVkZTNkMSIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6IlVzZXIiLCJzdWIiOiJ1c2VybmFtZTAyMSIsImV4cCI6MTcyNDQwNzU1OX0.wChBmdrnNoNy7IISOv_RyvHYB4gG4W68_eQ6E7ejy7Q",
-  //           "Content-Type": "application/json",
-  //         },
-  //       }
-  //     );
-  //     console.log("Student added successfully:", response.data);
-  //   } catch (error) {
-  //     console.error("Error adding student:", error);
-  //   }
-  // };
+  const searchName = () => {};
 
   const addStudent = async (studentData) => {
     console.log(studentData);
@@ -145,6 +123,36 @@ const StudentsData = () => {
   if (loading) return <p>Loading...</p>;
   if (error) return <p>{error}</p>;
 
+  const handleRowsPerPageChange = (e) => {
+    setRowsPerPage(Number(e.target.value)); // Update rows per page
+    setCurrentPage(1); // Reset to the first page
+  };
+
+  const handlePageChange = (newPage) => {
+    setCurrentPage(newPage);
+  };
+
+  const handleNextPage = () => {
+    if (currentPage < Math.ceil(data.length / rowsPerPage)) {
+      setCurrentPage(currentPage + 1);
+    }
+  };
+
+  const handlePreviousPage = () => {
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1);
+    }
+  };
+
+  const indexOfLastStudent = currentPage * rowsPerPage;
+  const indexOfFirstStudent = indexOfLastStudent - rowsPerPage;
+  const currentStudents = data.slice(indexOfFirstStudent, indexOfLastStudent);
+
+  const pageNumbers = [];
+  for (let i = 1; i <= Math.ceil(data.length / rowsPerPage); i++) {
+    pageNumbers.push(i);
+  }
+
   return (
     <div className="bg-white w-full m-10 rounded-xl p-10 ring-2 ring-[#7777771A] drop-shadow-md">
       <div className="flex justify-between items-center mb-6">
@@ -171,18 +179,16 @@ const StudentsData = () => {
             alt="Search icon"
             className="absolute top-1/2 right-3 transform -translate-y-1/2 w-5 h-5"
           />
+          {/* ================== */}
           <input
             type="text"
             placeholder="Search by first name, last name"
             className="w-full py-3 rounded-xl pl-10 pr-16 ring-1 ring-gray-300 focus:ring-black text-xl"
           />
+          {/* =============== */}
         </div>
-        <div
-          className="relative bg-white py-2 px-4 rounded-xl ring-1 ring-gray-300 cursor-pointer select-none"
-          // onClick={handleClick}
-        >
+        <div className="relative bg-white py-2 px-4 rounded-xl ring-1 ring-gray-300 cursor-pointer select-none">
           <div className="flex items-center">
-            {/* <span className="text-lg text-gray-700 mr-2">Equal to</span> */}
             <select
               name="eduLevel"
               value={eduLevel}
@@ -251,49 +257,47 @@ const StudentsData = () => {
             </div>
           </div>
           <div className="bg-white divide-y divide-gray-200">
-            {data.map((item) => (
+            {currentStudents.map((item) => (
               <div
                 key={item.id}
-                className={`flex rounded-lg ${
+                className={`flex rounded-lg text-lg ${
                   data.indexOf(item) % 2 === 0 ? "bg-white" : "bg-gray-300"
                 }`}
               >
-                <div className="flex-1 px-6 py-4 text-sm text-gray-900">
+                <div className="flex-1 px-6 py-4 text-gray-900">
                   {item.firstName || "N/A"}
                 </div>
-                <div className="flex-1 px-6 py-4 text-sm text-gray-900">
+                <div className="flex-1 px-6 py-4 text-gray-900">
                   {item.lastName || "N/A"}
                 </div>
-                <div className="flex-1 px-6 py-4 text-sm text-gray-900">
+                <div className="flex-1 px-6 py-4 text-gray-900">
                   {item.birthDate
                     ? new Date(item.birthDate).toISOString()
                     : "N/A"}
                 </div>
-                <div className="flex-1 px-6 py-4 text-sm text-gray-900">
+                <div className="flex-1 px-6 py-4 text-gray-900">
                   {item.grade?.translations?.[0]?.name || "N/A"}
                 </div>
-                <div className="flex-1 px-6 py-4 text-sm text-gray-900">
+                <div className="flex-1 px-6 py-4 text-gray-900">
                   {item.gender?.translations?.[0]?.name || "N/A"}
                 </div>
-                <div className="flex-1 px-6 py-4 text-sm text-gray-900">
+                <div className="flex-1 px-6 py-4 text-gray-900">
                   {item.country || "N/A"}
                 </div>
-                <div className="flex-1 px-6 py-4 text-sm text-gray-900">
+                <div className="flex-1 px-6 py-4 text-gray-900">
                   {item.city || "N/A"}
                 </div>
-                <div className="flex-1 px-6 py-4 text-sm text-gray-900">
+                <div className="flex-1 px-6 py-4 text-gray-900">
                   {item.phone || "N/A"}
                 </div>
-                <div className="flex-1 px-6 py-4 text-sm text-gray-900">
+                <div className="flex-1 px-6 py-4 text-gray-900">
                   {item.remarks || "N/A"}
                 </div>
-                <div className="flex-1 px-6 py-4 text-sm text-gray-900">
+                <div className="flex-1 px-6 py-4 text-gray-900">
                   <div className="flex gap-3">
                     <button
                       className="text-blue-500 hover:text-blue-700"
-                      onClick={() => {
-                        handleDeleteStudent(item.id);
-                      }}
+                      onClick={() => handleDeleteStudent(item.id)}
                     >
                       <img src={bin} alt="delete" />
                     </button>
@@ -308,8 +312,55 @@ const StudentsData = () => {
         </div>
       </div>
       <div className="bg-gray-200 h-1 my-6" />
-      <div>
-        <p className="text-xl opacity-65">Rows per page:</p>
+      <div className="flex justify-between items-center">
+        <div className="flex items-center ">
+          <label
+            htmlFor="rowsPerPage"
+            className="text-lg text-gray-700 mr-2 font-medium opacity-60"
+          >
+            Rows per page:
+          </label>
+          <select
+            name="rowsPerPage"
+            value={rowsPerPage}
+            onChange={handleRowsPerPageChange}
+            className="ring-2 px-5 py-1 ring-gray-400 rounded-lg mx-2 text-lg text-gray-700"
+          >
+            <option value={25}>25</option>
+            <option value={15}>15</option>
+            <option value={10}>10</option>
+          </select>
+        </div>
+
+        <div className="">
+          <button
+            onClick={handlePreviousPage}
+            disabled={currentPage === 1}
+            className="px-4 py-2 mx-1 rounded-lg bg-gray-200 hover:bg-gray-300 disabled:bg-gray-300"
+          >
+            &lt;
+          </button>
+          {pageNumbers.map((number) => (
+            <button
+              key={number}
+              onClick={() => handlePageChange(number)}
+              className={`px-4 py-2 mx-1 rounded-lg ${
+                number === currentPage
+                  ? "bg-blue-500 text-white"
+                  : "bg-gray-200"
+              }`}
+            >
+              {number}
+            </button>
+          ))}
+          <button
+            onClick={handleNextPage}
+            disabled={currentPage === Math.ceil(data.length / rowsPerPage)}
+            className="px-4 py-2 mx-1 rounded-lg bg-gray-200 hover:bg-gray-300 disabled:bg-gray-300"
+          >
+            &gt;
+          </button>
+        </div>
       </div>
     </div>
   );
