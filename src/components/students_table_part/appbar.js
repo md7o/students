@@ -8,7 +8,7 @@ const AppBar = () => {
         <div className="flex justify-center items-center px-10">
           <p className="mx-5">Name</p>
           <p>image</p>
-          {/* <DropDownButton /> */}
+          <DropDownButton />
         </div>
       </div>
       <div className="h-hightLine w-full bg-shadowLine" />
