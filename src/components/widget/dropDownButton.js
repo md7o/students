@@ -18,7 +18,7 @@ const DropDownButton = ({ onLanguageChange }) => {
     <div className="relative">
       <button
         onClick={toggleDropdown}
-        className="px-4 py-1 ring-1 ring-black rounded-lg shadow-md hover:bg-gray-200 m-5"
+        className="px-4 py-1 ring-1 ring-black rounded-lg shadow-md hover:bg-gray-200 mt-1"
       >
         {selectedLanguage} ˅
       </button>

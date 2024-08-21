@@ -1,5 +1,5 @@
 import DropDownButton from "../../components/widget/dropDownButton";
-import metro from "../../assets/images/metro.jpg";
+import profile from "../../assets/images/profile.png";
 import React from "react";
 
 const AppBar = ({ onLanguageChange }) => {
@@ -10,7 +10,7 @@ const AppBar = ({ onLanguageChange }) => {
         <div className="flex justify-center items-center px-10">
           <p className="text-lg">William Jacobson</p>
           <img
-            src={metro}
+            src={profile}
             alt="Profile"
             className=" w-10 h-10 object-cover rounded-xl mx-3"
           />

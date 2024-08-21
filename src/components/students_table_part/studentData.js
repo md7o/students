@@ -88,10 +88,7 @@ const StudentsData = ({ lang }) => {
   };
 
   const addStudent = async (studentData) => {
-    console.log(studentData);
-
     const token = getCookie("authToken");
-    console.log(token);
 
     try {
       const response = await axios.post(
@@ -117,8 +114,6 @@ const StudentsData = ({ lang }) => {
       );
 
       window.location.reload();
-
-      console.log("Student added successfully:", response.data);
     } catch (error) {
       console.error("Error adding student:", error);
     }
@@ -154,8 +149,6 @@ const StudentsData = ({ lang }) => {
   }, [lang, i18n]);
 
   const handleEditStudent = async (updatedStudentData) => {
-    console.log(updatedStudentData);
-
     const token = getCookie("authToken");
 
     try {
@@ -186,8 +179,6 @@ const StudentsData = ({ lang }) => {
         }
       );
       window.location.reload();
-
-      console.log("Student added successfully:", response.data);
     } catch (error) {
       console.error("Error adding student:", error);
     }
@@ -196,8 +187,6 @@ const StudentsData = ({ lang }) => {
   const handleDeleteStudent = async (id) => {
     const url = "https://taxiapp.easybooks.me:8283/Student/Remove";
     const token = getCookie("authToken");
-
-    console.log("Sending DELETE request to:", url, token);
 
     try {
       const response = await axios.delete(url, {
@@ -209,8 +198,6 @@ const StudentsData = ({ lang }) => {
           Id: id,
         },
       });
-
-      console.log("Student deleted successfully", response.data);
 
       setData((prevData) => prevData.filter((student) => student.id !== id));
     } catch (error) {
@@ -466,7 +453,6 @@ const StudentsData = ({ lang }) => {
                       className="text-blue-500 hover:text-blue-700"
                       onClick={() => {
                         handleOpenModalForEdit(item);
-                        console.log(item, item.id);
                       }}
                     >
                       <img src={pencil} alt="edit" />
