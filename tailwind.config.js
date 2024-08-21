@@ -5,6 +5,7 @@ module.exports = {
     extend: {
       colors: {
         primary: "#1F7BF4",
+        hovprimary: "#0D69E1",
         shadowLine: "#E8E8E8",
       },
       flex: {

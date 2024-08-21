@@ -1,12 +1,16 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import AddModal from "../../components/modal/add_modal";
+import axios from "axios";
 
 const AddStudents = ({
   showModal,
   handleCloseModal,
   onAddStudent,
-  yourToken,
+  editStudent,
+  studentDataToEdit,
 }) => {
+  const [genders, setGenders] = useState([]);
+  const [grades, setGrades] = useState([]);
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -21,6 +25,56 @@ const AddStudents = ({
 
   const [errors, setErrors] = useState({});
 
+  useEffect(() => {
+    const fetchGendersAndGrades = async () => {
+      try {
+        const genderResponse = await axios.get(
+          "https://taxiapp.easybooks.me:8283/Settings/GetAllGenders",
+          {
+            headers: {
+              accept: "application/json",
+              Authorization: `Bearer eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6ImQxYTlmYjdkLTM5MzctNDRmNi0xMzVhLTA4ZGNhY2FjMjNkYyIsImp0aSI6IjU3NGEyMjRjLTVmNTYtNGE1Ni1hODA4LTExOGZjNDI4NTk5MCIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6IlVzZXIiLCJzdWIiOiJ1c2VybmFtZTAyMSIsImV4cCI6MTcyNDQ0Nzk3N30.rvBE9Vpk5v4UFOXDU7_kXzN_3WX80nWGgUtLldJKGRo`,
+            },
+          }
+        );
+        const gradeResponse = await axios.get(
+          "https://taxiapp.easybooks.me:8283/Settings/GetAllGrades",
+          {
+            headers: {
+              accept: "application/json",
+              Authorization: `Bearer eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6ImQxYTlmYjdkLTM5MzctNDRmNi0xMzVhLTA4ZGNhY2FjMjNkYyIsImp0aSI6IjU3NGEyMjRjLTVmNTYtNGE1Ni1hODA4LTExOGZjNDI4NTk5MCIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6IlVzZXIiLCJzdWIiOiJ1c2VybmFtZTAyMSIsImV4cCI6MTcyNDQ0Nzk3N30.rvBE9Vpk5v4UFOXDU7_kXzN_3WX80nWGgUtLldJKGRo`,
+            },
+          }
+        );
+
+        setGenders(genderResponse.data);
+        setGrades(gradeResponse.data);
+      } catch (error) {
+        console.error("Error fetching genders or grades:", error);
+      }
+    };
+
+    fetchGendersAndGrades();
+
+    if (studentDataToEdit) {
+      setFormData(studentDataToEdit);
+    } else {
+      setFormData({
+        firstName: "",
+        lastName: "",
+        birthDate: "",
+        grade: "",
+        gender: "",
+        country: "",
+        city: "",
+        phone: "",
+        remarks: "",
+      });
+    }
+  }, [studentDataToEdit]);
+
+  if (!showModal) return null;
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
@@ -29,89 +83,50 @@ const AddStudents = ({
 
   const validateForm = () => {
     let valid = true;
-    let newErrors = {};
+    const requiredFields = [
+      "firstName",
+      "lastName",
+      "birthDate",
+      "grade",
+      "country",
+      "city",
+      "phone",
+      "gender",
+    ];
 
-    if (!formData.firstName) {
-      newErrors.firstName = "First Name is required.";
-      valid = false;
-    }
-    if (!formData.lastName) {
-      newErrors.lastName = "Last Name is required.";
-      valid = false;
-    }
-    if (!formData.birthDate) {
-      newErrors.birthDate = "Date of Birth is required.";
-      valid = false;
-    }
-    if (!formData.grade) {
-      newErrors.grade = "Educational Level is required.";
-      valid = false;
-    }
-    if (!formData.country) {
-      newErrors.country = "Country is required.";
-      valid = false;
-    }
-    if (!formData.city) {
-      newErrors.city = "City is required.";
-      valid = false;
-    }
-    if (!formData.phone) {
-      newErrors.phone = "Mobile number is required.";
-      valid = false;
-    }
-    if (!formData.gender) {
-      newErrors.gender = "Gender is required.";
-      valid = false;
-    }
+    let newErrors = {};
+    requiredFields.forEach((field) => {
+      if (!formData[field]) {
+        newErrors[field] = true;
+        valid = false;
+      }
+    });
+
     setErrors(newErrors);
     return valid;
-  };
-
-  const handleAddStudent = () => {
-    const studentData = {
-      firstName: formData.firstName,
-      lastName: formData.lastName,
-      birthDate: formData.birthDate,
-      grade: formData.grade,
-      gender: formData.gender,
-      country: formData.country,
-      city: formData.city,
-      phone: formData.phone,
-      remarks: formData.remarks,
-    };
-
-    fetch("https://taxiapp.easybooks.me:8283/Student/Add", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${yourToken}`,
-      },
-      body: JSON.stringify(studentData),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        console.log("Success:", data);
-        // Handle success scenario here
-      })
-      .catch((error) => {
-        console.error("Error:", error);
-        // Handle error scenario here
-      });
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
     if (validateForm()) {
-      onAddStudent(formData);
+      if (studentDataToEdit) {
+        editStudent(formData);
+      } else {
+        onAddStudent(formData);
+      }
       handleCloseModal();
     }
   };
 
   return (
     <AddModal show={showModal} onClose={handleCloseModal}>
-      <h2 className="text-4xl py-3 font-bold mb-4 text-black">Add Student</h2>
-      <form className="grid grid-cols-2 gap-4" onSubmit={handleSubmit}>
-        {/* First Name and Last Name */}
+      <h2 className="text-4xl py-3 font-bold mb-4 text-black">
+        {studentDataToEdit ? "Edit Student" : "Add Student"}
+      </h2>
+      <form
+        className="grid grid-cols-2 gap-4 cursor-auto"
+        onSubmit={handleSubmit}
+      >
         <div>
           <label className="block text-gray-700 font-medium text-md">
             First Name<span className="text-2xl">*</span>
@@ -178,15 +193,20 @@ const AddStudents = ({
             } bg-[#00000010]`}
           >
             <option value="">Select educational level</option>
-            <option value="high-school">High School</option>
-            <option value="bachelors">Bachelor's</option>
-            <option value="masters">Master's</option>
-            <option value="phd">Ph.D.</option>
+            {grades.map((grade) => {
+              const translation = grade.translations.find(
+                (trans) => trans.cultureCode === 0 // Replace with user's culture code if necessary
+              );
+              return (
+                <option key={grade.id} value={grade.id}>
+                  {translation ? translation.name : "Unknown"}
+                </option>
+              );
+            })}
           </select>
           {errors.grade && <p className="text-[#F34235]">{errors.grade}</p>}
         </div>
 
-        {/* Country and City */}
         <div>
           <label className="block text-gray-700 font-medium text-md">
             Country<span className="text-2xl">*</span>
@@ -242,13 +262,21 @@ const AddStudents = ({
             name="gender"
             value={formData.gender}
             onChange={handleChange}
-            className={`w-full px-3 py-3 my-2 border rounded-xl text-black font-medium ring-1 ${
+            className={`w-full px-3 py-3 my-2 border rounded-xl font-medium ring-1 ${
               errors.gender ? "ring-[#F34235]" : "ring-gray-300"
             } bg-[#00000010]`}
           >
             <option value="">Select gender</option>
-            <option value="female">Female</option>
-            <option value="male">Male</option>
+            {genders.map((gender) => {
+              const translation = gender.translations.find(
+                (trans) => trans.cultureCode === 0 // Replace with user's culture code if necessary
+              );
+              return (
+                <option key={gender.id} value={gender.id}>
+                  {translation ? translation.name : "Unknown"}
+                </option>
+              );
+            })}
           </select>
           {errors.gender && <p className="text-[#F34235]">{errors.gender}</p>}
         </div>
@@ -269,7 +297,7 @@ const AddStudents = ({
         <div className="col-span-2 flex gap-4">
           <button
             type="submit"
-            className="w-full bg-primary text-white px-6 py-2 rounded-lg"
+            className="w-full bg-primary text-white px-6 py-2 rounded-lg hover:bg-hovprimary duration-200"
           >
             Add
           </button>

@@ -23,6 +23,13 @@ const resources = {
       Notes: "Notes",
       Actions: "Actions",
       Rows_Per_Page: "Rows_Per_Page:",
+
+      // Login part //
+
+      Login_title: "Login",
+      Username_label: "Username",
+      Password_label: "Password",
+      sign_in: "Sign In",
     },
   },
   ar: {
@@ -45,6 +52,13 @@ const resources = {
       Notes: "ملحوظات",
       Actions: "الإجراءات",
       Rows_Per_Page: ":النتائج لكل صفحة",
+
+      // Login part //
+
+      Login_title: "تسجيل الدخول",
+      Username_label: "اسم المستخدم",
+      Password_label: "كلمة المرور",
+      sign_in: "تسجيل الدخول",
     },
   },
 };

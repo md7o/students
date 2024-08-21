@@ -11,14 +11,14 @@ const DropDownButton = ({ onLanguageChange }) => {
   const handleOptionClick = (language, label) => {
     setSelectedLanguage(label);
     setIsOpen(false);
-    onLanguageChange(language); // Notify parent component about the language change
+    onLanguageChange(language);
   };
 
   return (
     <div className="relative">
       <button
         onClick={toggleDropdown}
-        className="px-4 py-1 ring-1 ring-black rounded-lg shadow-md hover:bg-gray-200"
+        className="px-4 py-1 ring-1 ring-black rounded-lg shadow-md hover:bg-gray-200 m-5"
       >
         {selectedLanguage} ˅
       </button>

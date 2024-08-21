@@ -1,36 +1,108 @@
 import people from "../../assets/images/people.png";
 import DropDownButton from "../../components/widget/dropDownButton";
-import React, { useState } from "react";
+import spin from "../../assets/images/loading.png";
+import React, { useEffect, useState } from "react";
+import { Navigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
-const LoginPage = () => {
+const LoginPage = ({ lang }) => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const [redirect, setRedirect] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const { t, i18n } = useTranslation();
+
+  useEffect(() => {
+    if (lang) {
+      i18n.changeLanguage(lang);
+    }
+  }, [lang, i18n]);
+
+  const onLanguageChange = (newLang) => {
+    i18n.changeLanguage(newLang);
+  };
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    setIsLoading(true);
+
+    if (!email || !password) {
+      setError("Please enter both email and password");
+      return;
+    }
+
+    try {
+      const response = await fetch(
+        "https://taxiapp.easybooks.me:8283/User/SignIn",
+        {
+          method: "POST",
+          headers: {
+            accept: "application/json",
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ userName: email, password }),
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Sign-in failed");
+      }
+
+      const data = await response.json();
+      console.log("Sign-in successful:", data);
+
+      const { token } = data;
+
+      document.cookie = `authToken=${token}; path=/; max-age=${
+        7 * 24 * 60 * 60
+      }`;
+
+      console.log("Sign-in successful:", token);
+
+      setRedirect(true);
+    } catch (error) {
+      setError(error.message);
+    }
+  };
+
+  if (redirect) {
+    // Use Navigate to redirect if redirection state is true
+    return <Navigate to="/students" />;
+  }
+
   return (
     <div className="flex h-screen">
       <div className=" hidden flex-1 lg:flex justify-center items-center">
         <div className="flex flex-col h-screen">
-          <DropDownButton />
+          <DropDownButton onLanguageChange={onLanguageChange} />
           <div className="flex-1 flex items-center justify-center ">
             <img src={people} alt="People" className="w-2/3 mx-auto" />
           </div>
         </div>
       </div>
       <div className="flex-1.5 bg-[#2148C0] flex justify-center items-center">
-        <div className="bg-white rounded-xl sm:px-24 px-5 py-20 w-full 2.5xl:max-w-6xl 2xl:max-w-3xl md:max-w-xl max-w-3xl ">
-          <p className="text-black :text-6xl text-5xl font-bold mb-20 ">
-            Login
+        <div
+          className={`bg-white rounded-xl sm:px-24 px-5 py-20 w-full 2.5xl:max-w-6xl 2xl:max-w-3xl md:max-w-xl max-w-3xl ${
+            i18n.language === "en" ? "text-start" : "text-end"
+          }`}
+        >
+          <p className="text-black  text-5xl font-bold mb-20 ">
+            {t("Login_title")}
           </p>
-          <form>
+          <form onSubmit={handleSubmit}>
             <div className="mb-8">
               <label
                 htmlFor="username"
                 className="block text-2xl text-black opacity-60"
               >
-                Username
+                {t("Username_label")}
               </label>
               <input
-                id="username"
+                id="email"
                 type="text"
-                // value={tag.value}
-                // onChange={(event) => handleTagChange(index, event)}
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 className="w-full py-5 mt-5 rounded-xl text-left px-3 ring-1 ring-gray-300 focus:ring- text-3xl"
               />
             </div>
@@ -39,21 +111,31 @@ const LoginPage = () => {
                 htmlFor="password"
                 className="block text-2xl text-black opacity-60"
               >
-                Password
+                {t("Password_label")}
               </label>
               <input
-                id="password"
                 type="password"
-                // value={tag.value}
-                // onChange={(event) => handleTagChange(index, event)}
+                id="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
                 className="w-full py-5 mt-5 rounded-xl text-left px-3 ring-1 ring-gray-300 focus:ring- text-3xl"
               />
             </div>
+            {error && <p className="error">{error}</p>}
             <button
               className="w-full bg-primary text-white py-5 px-4 rounded-xl text-3xl hover:bg-blue-600 transition"
               type="submit"
+              disabled={isLoading} // Correctly using the `disabled` attribute
             >
-              Sign In
+              {isLoading ? (
+                <img
+                  src={spin}
+                  alt="Loading spinner"
+                  className="w-8 h-8 mx-auto animate-spin"
+                />
+              ) : (
+                t("sign_in", "Sign In")
+              )}
             </button>
           </form>
         </div>

@@ -5,13 +5,3 @@
 .scrollLock {
   overflow-x: hidden; /* Hides the vertical scrollbar */
 }
-
-.flex-col-en {
-  display: flex;
-  flex-direction: column;
-}
-
-.flex-col-ar {
-  display: flex;
-  flex-direction: column-reverse;
-}

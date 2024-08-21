@@ -8,52 +8,91 @@ import plus from "../../assets/images/plus.png";
 import filter from "../../assets/images/filter.png";
 import bin from "../../assets/images/bin.png";
 import pencil from "../../assets/images/pencil.png";
+import spin from "../../assets/images/loading.png";
 import "react-datepicker/dist/react-datepicker.css";
-import AppBar from "../../components/students_table_part/appbar";
+import DeleteModal from "../../components/modal/delete_modal";
+import { getCookie } from "../../cookieUtils";
 
 import { useTranslation } from "react-i18next";
 
 const StudentsData = ({ lang }) => {
   const { t, i18n } = useTranslation();
-  const [language, setLanguage] = useState("en");
   const [startDate, setStartDate] = useState(new Date());
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [isSearch, setIsSearch] = useState("");
   const [showModal, setShowModal] = useState(false);
-  const [eduLevel, setEduLevel] = useState("equal-to");
+  const [studentDataToEdit, setStudentDataToEdit] = useState(null);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [studentIdToDelete, setStudentIdToDelete] = useState(null);
   const [rowsPerPage, setRowsPerPage] = useState(25);
   const [currentPage, setCurrentPage] = useState(1);
+  const [birthDateFilter, setBirthDateFilter] = useState(null);
+  const [dateComparison, setDateComparison] = useState("Equal_to");
+
   const datePickerRef = useRef(null);
 
-  const handleLanguageChange = (lang) => {
-    setLanguage(lang);
+  const handleOpenModalForAdd = () => {
+    setStudentDataToEdit(null);
+    setShowModal(true);
   };
-
-  const handleChange = (e) => {
-    setEduLevel(e.target.value);
-  };
-
-  const handleOpenModal = () => {
+  const handleOpenModalForEdit = (studentData) => {
+    setStudentDataToEdit(studentData);
     setShowModal(true);
   };
   const handleCloseModal = () => {
     setShowModal(false);
+    setStudentDataToEdit(null);
+  };
+
+  const handleDeleteClick = (id) => {
+    setStudentIdToDelete(id);
+    setShowDeleteModal(true);
+  };
+
+  const confirmDelete = () => {
+    handleDeleteStudent(studentIdToDelete);
+    setShowDeleteModal(false);
+  };
+
+  const cancelDelete = () => {
+    setShowDeleteModal(false);
   };
 
   const searchName = (e) => {
     setIsSearch(e.target.value);
   };
 
-  const filteredData = data.filter(
-    (item) =>
+  const filteredData = data.filter((item) => {
+    const itemDate = new Date(item.birthDate);
+    const filterDate = new Date(birthDateFilter);
+
+    const matchesName =
       item.firstName.toLowerCase().includes(isSearch.toLowerCase()) ||
-      item.lastName.toLowerCase().includes(isSearch.toLowerCase())
-  );
+      item.lastName.toLowerCase().includes(isSearch.toLowerCase());
+
+    const matchesBirthDate = birthDateFilter
+      ? {
+          Equal_to: itemDate.toDateString() === filterDate.toDateString(),
+          Greater_than: itemDate > filterDate,
+          Less_than: itemDate < filterDate,
+        }[dateComparison] // dateComparison should be the value of your select dropdown
+      : true;
+
+    return matchesName && matchesBirthDate;
+  });
+
+  const handleComparisonChange = (e) => {
+    setDateComparison(e.target.value);
+  };
 
   const addStudent = async (studentData) => {
     console.log(studentData);
+
+    const token = getCookie("authToken");
+    console.log(token);
+
     try {
       const response = await axios.post(
         "https://taxiapp.easybooks.me:8283/Student/Add",
@@ -61,8 +100,8 @@ const StudentsData = ({ lang }) => {
           firstName: studentData.firstName,
           lastName: studentData.lastName,
           birthDate: studentData.birthDate,
-          grade: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-          gender: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+          grade: studentData.grade,
+          gender: studentData.gender,
           country: studentData.country,
           city: studentData.city,
           phone: studentData.phone,
@@ -71,12 +110,13 @@ const StudentsData = ({ lang }) => {
         {
           headers: {
             Accept: "*/*",
-            Authorization:
-              "Bearer eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6ImQxYTlmYjdkLTM5MzctNDRmNi0xMzVhLTA4ZGNhY2FjMjNkYyIsImp0aSI6ImIyZGEzMzllLTRjNjEtNDRiYS1hNzUzLTYzZDAwMjQ1M2RlNSIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6IlVzZXIiLCJzdWIiOiJ1c2VybmFtZTAyMSIsImV4cCI6MTcyNDQxMzE1NH0.nHYJRhBF0Puc2iEMIanhZFdTntdIN8zXRkyorg_hpnQ",
+            Authorization: `Bearer ${token}`,
             "Content-Type": "application/json",
           },
         }
       );
+
+      window.location.reload();
 
       console.log("Student added successfully:", response.data);
     } catch (error) {
@@ -86,14 +126,15 @@ const StudentsData = ({ lang }) => {
 
   useEffect(() => {
     const fetchData = async () => {
+      const token = getCookie("authToken");
+
       try {
         const response = await axios.get(
           "https://taxiapp.easybooks.me:8283/Student/GetAll",
           {
             headers: {
               accept: "application/json",
-              Authorization:
-                "Bearer eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6ImQxYTlmYjdkLTM5MzctNDRmNi0xMzVhLTA4ZGNhY2FjMjNkYyIsImp0aSI6IjQ2OGMzNWU2LWUzMGUtNGExNi1iZWI5LWFhYTlmYzE5OWFmNyIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6IlVzZXIiLCJzdWIiOiJ1c2VybmFtZTAyMSIsImV4cCI6MTcyNDM2NDk5OX0.lUsu_jYOWtIMWmZK6knsqjjigdhtkgh-jAj8iJxgrvs",
+              Authorization: `Bearer ${token}`,
             },
           }
         );
@@ -105,16 +146,56 @@ const StudentsData = ({ lang }) => {
         setLoading(false);
       }
     };
+
     if (lang) {
       i18n.changeLanguage(lang);
     }
     fetchData();
   }, [lang, i18n]);
 
+  const handleEditStudent = async (updatedStudentData) => {
+    console.log(updatedStudentData);
+
+    const token = getCookie("authToken");
+
+    try {
+      const response = await axios.put(
+        "https://taxiapp.easybooks.me:8283/Student/Edit",
+        {
+          firstName: updatedStudentData.firstName,
+          lastName: updatedStudentData.lastName,
+          birthDate: updatedStudentData.birthDate,
+          grade: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+          gender: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+          country: updatedStudentData.country,
+          city: updatedStudentData.city,
+          phone: updatedStudentData.phone,
+          remarks: updatedStudentData.remarks,
+          id: updatedStudentData.id,
+        },
+        {
+          headers: {
+            Accept: "*/*",
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+
+          params: {
+            Id: updatedStudentData.id,
+          },
+        }
+      );
+      window.location.reload();
+
+      console.log("Student added successfully:", response.data);
+    } catch (error) {
+      console.error("Error adding student:", error);
+    }
+  };
+
   const handleDeleteStudent = async (id) => {
     const url = "https://taxiapp.easybooks.me:8283/Student/Remove";
-    const token =
-      "eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6ImQxYTlmYjdkLTM5MzctNDRmNi0xMzVhLTA4ZGNhY2FjMjNkYyIsImp0aSI6ImIyZGEzMzllLTRjNjEtNDRiYS1hNzUzLTYzZDAwMjQ1M2RlNSIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6IlVzZXIiLCJzdWIiOiJ1c2VybmFtZTAyMSIsImV4cCI6MTcyNDQxMzE1NH0.nHYJRhBF0Puc2iEMIanhZFdTntdIN8zXRkyorg_hpnQ";
+    const token = getCookie("authToken");
 
     console.log("Sending DELETE request to:", url);
 
@@ -130,7 +211,8 @@ const StudentsData = ({ lang }) => {
       });
 
       console.log("Student deleted successfully", response.data);
-      // Update state or handle success
+
+      setData((prevData) => prevData.filter((student) => student.id !== id));
     } catch (error) {
       console.error(
         "Error deleting student:",
@@ -139,12 +221,31 @@ const StudentsData = ({ lang }) => {
     }
   };
 
-  if (loading) return <p>Loading...</p>;
+  const formatDate = (dateString) => {
+    if (!dateString) return "N/A";
+
+    const date = new Date(dateString);
+    const month = date.getMonth() + 1;
+    const day = date.getDate();
+    const year = date.getFullYear().toString();
+
+    const formattedMonth = month < 10 ? `0${month}` : month;
+    const formattedDay = day < 10 ? `0${day}` : day;
+
+    return `${year}/${formattedDay}/${formattedMonth}`;
+  };
+
+  if (loading)
+    return (
+      <div className="flex items-center justify-center mx-auto">
+        <img src={spin} alt={spin} className="w-14 h-14 animate-spin" />
+      </div>
+    );
   if (error) return <p>{error}</p>;
 
   const handleRowsPerPageChange = (e) => {
-    setRowsPerPage(Number(e.target.value)); // Update rows per page
-    setCurrentPage(1); // Reset to the first page
+    setRowsPerPage(Number(e.target.value));
+    setCurrentPage(1);
   };
 
   const handlePageChange = (newPage) => {
@@ -176,7 +277,7 @@ const StudentsData = ({ lang }) => {
   }
 
   return (
-    <div className="bg-white w-full m-10 rounded-xl p-10 ring-2 ring-[#7777771A] drop-shadow-md">
+    <div className="bg-white lg:w-full lg:m-10 m-5 rounded-xl lg:p-10 p-5 ring-2 ring-[#7777771A] drop-shadow-md">
       <div
         className={`mb-6 ${
           lang === "en"
@@ -185,17 +286,31 @@ const StudentsData = ({ lang }) => {
         }`}
       >
         <p className="text-3xl font-semibold">{t("Students_Data")}</p>
-        <div className="flex items-center bg-primary rounded-2xl text-white text-lg font-light px-6 py-3">
-          <button onClick={handleOpenModal}>{t("Add_Student")}</button>
+        <div>
+          <button
+            className="flex justify-center items-center bg-primary rounded-2xl text-white text-lg font-light px-6 py-3 hover:bg-hovprimary cursor-pointer"
+            onClick={handleOpenModalForAdd}
+          >
+            {t("Add_Student")}
+            <img src={plus} alt="plus" className="w-5 ml-3" />
+          </button>
+
+          <DeleteModal
+            show={showDeleteModal}
+            onClose={cancelDelete}
+            onConfirm={confirmDelete}
+            message="Are you sure you want to delete this student?"
+          />
+
           <AddStudents
             showModal={showModal}
             handleCloseModal={handleCloseModal}
             onAddStudent={addStudent}
+            editStudent={handleEditStudent}
+            studentDataToEdit={studentDataToEdit}
           />
-          <img src={plus} alt="plus" className="w-5 ml-3" />
         </div>
       </div>
-
       <div
         className={`mb-6 space-x-6 ${
           lang === "en"
@@ -231,9 +346,9 @@ const StudentsData = ({ lang }) => {
         <div className="relative bg-white py-2 px-4 rounded-xl ring-1 ring-gray-300 cursor-pointer select-none">
           <div className="flex items-center">
             <select
-              name="eduLevel"
-              value={eduLevel}
-              onChange={handleChange}
+              name="dateComparison"
+              value={dateComparison}
+              onChange={handleComparisonChange}
               className=" outline-none text-lg text-gray-700 mr-2"
             >
               <option value="Equal_to">{t("Equal_to")}</option>
@@ -246,7 +361,7 @@ const StudentsData = ({ lang }) => {
               <DatePicker
                 ref={datePickerRef}
                 selected={startDate}
-                onChange={(date) => setStartDate(date)}
+                onChange={(date) => setBirthDateFilter(date)}
                 dateFormat="MM/dd/yyyy"
                 className="w-full border-transparent rounded-sm text-gray-600 focus:outline-none cursor-pointer"
                 placeholderText="Select a date"
@@ -260,9 +375,7 @@ const StudentsData = ({ lang }) => {
           </div>
         </div>
       </div>
-
       <div className="bg-gray-200 h-1 mb-6" />
-
       <div className="overflow-x-auto ">
         <div className="bg-gray-100 ">
           <div
@@ -307,10 +420,9 @@ const StudentsData = ({ lang }) => {
             {currentStudents.map((item) => (
               <div
                 key={item.id}
-                className={` rounded-lg text-lg ${
-                  (data.indexOf(item) % 2 === 0 ? "bg-white" : "bg-gray-300",
-                  lang === "en" ? "flex " : "flex flex-row-reverse ")
-                }`}
+                className={`rounded-lg text-lg ${
+                  data.indexOf(item) % 2 === 0 ? "bg-white" : "bg-gray-300"
+                } ${lang === "en" ? "flex" : "flex flex-row-reverse"}`}
               >
                 <div className="flex-1 px-6 py-4 text-gray-900">
                   {item.firstName || "N/A"}
@@ -319,9 +431,7 @@ const StudentsData = ({ lang }) => {
                   {item.lastName || "N/A"}
                 </div>
                 <div className="flex-1 px-6 py-4 text-gray-900">
-                  {item.birthDate
-                    ? new Date(item.birthDate).toISOString()
-                    : "N/A"}
+                  {item.birthDate ? formatDate(item.birthDate) : "N/A"}
                 </div>
                 <div className="flex-1 px-6 py-4 text-gray-900">
                   {item.grade?.translations?.[0]?.name || "N/A"}
@@ -345,11 +455,17 @@ const StudentsData = ({ lang }) => {
                   <div className="flex gap-3">
                     <button
                       className="text-blue-500 hover:text-blue-700"
-                      onClick={() => handleDeleteStudent(item.id)}
+                      onClick={() => handleDeleteClick(item.id)}
                     >
                       <img src={bin} alt="delete" />
                     </button>
-                    <button className="text-blue-500 hover:text-blue-700">
+                    <button
+                      className="text-blue-500 hover:text-blue-700"
+                      onClick={() => {
+                        handleOpenModalForEdit(item);
+                        console.log(item, item.id);
+                      }}
+                    >
                       <img src={pencil} alt="edit" />
                     </button>
                   </div>
