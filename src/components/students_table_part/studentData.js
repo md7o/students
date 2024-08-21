@@ -91,7 +91,7 @@ const StudentsData = ({ lang }) => {
     const token = getCookie("authToken");
 
     try {
-      const response = await axios.post(
+      await axios.post(
         "https://taxiapp.easybooks.me:8283/Student/Add",
         {
           firstName: studentData.firstName,
@@ -152,7 +152,7 @@ const StudentsData = ({ lang }) => {
     const token = getCookie("authToken");
 
     try {
-      const response = await axios.put(
+      await axios.put(
         "https://taxiapp.easybooks.me:8283/Student/Edit",
         {
           firstName: updatedStudentData.firstName,
@@ -189,7 +189,7 @@ const StudentsData = ({ lang }) => {
     const token = getCookie("authToken");
 
     try {
-      const response = await axios.delete(url, {
+      await axios.delete(url, {
         headers: {
           Accept: "application/json",
           Authorization: `Bearer ${token}`,
