@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import AddModal from "../../components/modal/add_modal";
 import axios from "axios";
+import { getCookie } from "../../cookieUtils";
 
 const AddStudents = ({
   showModal,
@@ -11,6 +12,7 @@ const AddStudents = ({
 }) => {
   const [genders, setGenders] = useState([]);
   const [grades, setGrades] = useState([]);
+  const dateInputRef = useRef(null);
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -25,15 +27,24 @@ const AddStudents = ({
 
   const [errors, setErrors] = useState({});
 
+  const handleInputClick = () => {
+    if (dateInputRef.current) {
+      dateInputRef.current.focus(); // Ensure the input is focused
+      dateInputRef.current.showPicker(); // For modern browsers, trigger the date picker
+    }
+  };
+
   useEffect(() => {
     const fetchGendersAndGrades = async () => {
+      const token = getCookie("authToken");
+
       try {
         const genderResponse = await axios.get(
           "https://taxiapp.easybooks.me:8283/Settings/GetAllGenders",
           {
             headers: {
               accept: "application/json",
-              Authorization: `Bearer eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6ImQxYTlmYjdkLTM5MzctNDRmNi0xMzVhLTA4ZGNhY2FjMjNkYyIsImp0aSI6IjU3NGEyMjRjLTVmNTYtNGE1Ni1hODA4LTExOGZjNDI4NTk5MCIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6IlVzZXIiLCJzdWIiOiJ1c2VybmFtZTAyMSIsImV4cCI6MTcyNDQ0Nzk3N30.rvBE9Vpk5v4UFOXDU7_kXzN_3WX80nWGgUtLldJKGRo`,
+              Authorization: `Bearer ${token}`,
             },
           }
         );
@@ -42,7 +53,7 @@ const AddStudents = ({
           {
             headers: {
               accept: "application/json",
-              Authorization: `Bearer eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6ImQxYTlmYjdkLTM5MzctNDRmNi0xMzVhLTA4ZGNhY2FjMjNkYyIsImp0aSI6IjU3NGEyMjRjLTVmNTYtNGE1Ni1hODA4LTExOGZjNDI4NTk5MCIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6IlVzZXIiLCJzdWIiOiJ1c2VybmFtZTAyMSIsImV4cCI6MTcyNDQ0Nzk3N30.rvBE9Vpk5v4UFOXDU7_kXzN_3WX80nWGgUtLldJKGRo`,
+              Authorization: `Bearer ${token}`,
             },
           }
         );
@@ -162,7 +173,6 @@ const AddStudents = ({
           )}
         </div>
 
-        {/* Date of Birth and Educational Level */}
         <div>
           <label className="block text-gray-700 font-medium text-md">
             Date of Birth<span className="text-2xl">*</span>
@@ -172,7 +182,9 @@ const AddStudents = ({
             name="birthDate"
             value={formData.birthDate}
             onChange={handleChange}
-            className={`w-full px-3 py-3 my-2 border rounded-xl text-black font-medium ring-1 ${
+            onClick={handleInputClick}
+            ref={dateInputRef}
+            className={`w-full px-3 py-3 my-2 border rounded-xl text-black font-medium ring-1 cursor-pointer${
               errors.birthDate ? "ring-[#F34235]" : "ring-gray-300"
             } bg-[#00000010]`}
           />

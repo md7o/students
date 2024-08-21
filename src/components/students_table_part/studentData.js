@@ -197,7 +197,7 @@ const StudentsData = ({ lang }) => {
     const url = "https://taxiapp.easybooks.me:8283/Student/Remove";
     const token = getCookie("authToken");
 
-    console.log("Sending DELETE request to:", url);
+    console.log("Sending DELETE request to:", url, token);
 
     try {
       const response = await axios.delete(url, {
@@ -299,7 +299,7 @@ const StudentsData = ({ lang }) => {
             show={showDeleteModal}
             onClose={cancelDelete}
             onConfirm={confirmDelete}
-            message="Are you sure you want to delete this student?"
+            // message="Are you sure you want to delete this student?"
           />
 
           <AddStudents
