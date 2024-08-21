@@ -361,7 +361,10 @@ const StudentsData = ({ lang }) => {
               <DatePicker
                 ref={datePickerRef}
                 selected={startDate}
-                onChange={(date) => setBirthDateFilter(date)}
+                onChange={(date) => {
+                  setBirthDateFilter(date);
+                  setStartDate(date);
+                }}
                 dateFormat="MM/dd/yyyy"
                 className="w-full border-transparent rounded-sm text-gray-600 focus:outline-none cursor-pointer"
                 placeholderText="Select a date"
