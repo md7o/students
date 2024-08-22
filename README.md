@@ -3,14 +3,23 @@
 ##Packages used
 
 axios
+
 i18next
+
 react-datepicker
+
 react-dom
+
 react-i18next
+
 react-router-dom
+
 react-scripts
+
 swagger-jsdoc
+
 swagger-ui-express
+
 web-vitals.
 
 and use tailwind css library
