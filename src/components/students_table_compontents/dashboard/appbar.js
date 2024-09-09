@@ -4,7 +4,7 @@ import React from "react";
 
 const AppBar = ({ onLanguageChange }) => {
   return (
-    <div className="my-2.5">
+    <div className="my-3 mb-14">
       <div className="flex justify-between items-center">
         <div className="flex justify-center items-center">
           <div className="group  w-8 h-7 flex flex-col justify-between items-start">

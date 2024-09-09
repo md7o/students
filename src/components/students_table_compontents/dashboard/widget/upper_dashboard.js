@@ -200,7 +200,7 @@ const UpperDashboard = ({ lang }) => {
             className=" py-2 rounded-xl px-5 text-xl"
           />
         </div>
-        <div className="flex justify-center items-center bg-white py-2 rounded-xl">
+        <div className="flex justify-center items-center bg-background py-2 px-2 rounded-xl shadowing hover:bg-primary duration-300">
           <img src={calendar} alt="Calendar icon" className="w-7 mx-3" />
           <DatePicker
             ref={datePickerRef}
@@ -211,7 +211,7 @@ const UpperDashboard = ({ lang }) => {
             }}
             dateFormat="MM/dd/yyyy"
             placeholderText="Select a date"
-            className="border-transparent font-bold mr-2 text-gray-600 focus:outline-none cursor-pointer w-28"
+            className="border-transparent  text-lg bg-transparent text-white focus:outline-none cursor-pointer w-28"
           />
         </div>
         {/* <select

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import bin from "../../../../assets/images/bin.png";
-import pencil from "../../../../assets/images/pencil.png";
+import bin from "../../../../assets/images/trash.png";
+import pencil from "../../../../assets/images/pen.png";
 import "react-datepicker/dist/react-datepicker.css";
 import { useTranslation } from "react-i18next";
 
@@ -135,15 +135,15 @@ const TableDashboard = ({ lang }) => {
             </td>
 
             <td className="px-6 py-3 whitespace-nowrap  text-gray-900">
-              <div className="flex gap-3">
+              <div className="flex gap-3 w-16 ">
                 <button
-                  className="text-blue-500 hover:text-blue-700"
+                  className="text-blue-500 hover:text-blue-700 hover:scale-95 hover:brightness-75 duration-300"
                   //   onClick={() => handleDeleteClick(item.id)}
                 >
-                  <img src={bin} alt="delete" />
+                  <img src={bin} alt="delete" className="" />
                 </button>
                 <button
-                  className="text-blue-500 hover:text-blue-700"
+                  className="text-blue-500 hover:text-blue-700 hover:scale-95 hover:brightness-75 duration-300"
                   //   onClick={() => handleOpenModalForEdit(item)}
                 >
                   <img src={pencil} alt="edit" />

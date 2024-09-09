@@ -14,24 +14,11 @@ const StudentsData = ({ lang }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [isSearch, setIsSearch] = useState("");
-  const [showModal, setShowModal] = useState(false);
-  const [studentDataToEdit, setStudentDataToEdit] = useState(null);
-  const [showDeleteModal, setShowDeleteModal] = useState(false);
-  const [studentIdToDelete, setStudentIdToDelete] = useState(null);
+
   const [rowsPerPage, setRowsPerPage] = useState(25);
   const [currentPage, setCurrentPage] = useState(1);
   const [birthDateFilter, setBirthDateFilter] = useState(null);
   const [dateComparison, setDateComparison] = useState("Equal_to");
-
-  const handleOpenModalForEdit = (studentData) => {
-    setStudentDataToEdit(studentData);
-    setShowModal(true);
-  };
-
-  const handleDeleteClick = (id) => {
-    setStudentIdToDelete(id);
-    setShowDeleteModal(true);
-  };
 
   const filteredData = data.filter((item) => {
     const itemDate = new Date(item.birthDate);
@@ -80,80 +67,6 @@ const StudentsData = ({ lang }) => {
     }
     fetchData();
   }, [lang, i18n]);
-
-  const handleEditStudent = async (updatedStudentData) => {
-    const token = getCookie("authToken");
-
-    try {
-      await axios.put(
-        "https://taxiapp.easybooks.me:8283/Student/Edit",
-        {
-          firstName: updatedStudentData.firstName,
-          lastName: updatedStudentData.lastName,
-          birthDate: updatedStudentData.birthDate,
-          grade: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-          gender: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-          country: updatedStudentData.country,
-          city: updatedStudentData.city,
-          phone: updatedStudentData.phone,
-          remarks: updatedStudentData.remarks,
-          id: updatedStudentData.id,
-        },
-        {
-          headers: {
-            Accept: "*/*",
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-
-          params: {
-            Id: updatedStudentData.id,
-          },
-        }
-      );
-      window.location.reload();
-    } catch (error) {
-      console.error("Error adding student:", error);
-    }
-  };
-
-  const handleDeleteStudent = async (id) => {
-    const url = "https://taxiapp.easybooks.me:8283/Student/Remove";
-    const token = getCookie("authToken");
-
-    try {
-      await axios.delete(url, {
-        headers: {
-          Accept: "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        params: {
-          Id: id,
-        },
-      });
-
-      setData((prevData) => prevData.filter((student) => student.id !== id));
-    } catch (error) {
-      console.error(
-        "Error deleting student:",
-        error.response ? error.response.data : error.message
-      );
-    }
-  };
-
-  const formatDate = (dateString) => {
-    if (!dateString) return "N/A";
-
-    const date = new Date(dateString);
-    const month = date.getMonth() + 1;
-    const day = date.getDate();
-    const year = date.getFullYear().toString();
-
-    const formattedMonth = month < 10 ? `0${month}` : month;
-    const formattedDay = day < 10 ? `0${day}` : day;
-
-    return `${year}/${formattedDay}/${formattedMonth}`;
-  };
 
   // if (loading)
   //   return (
