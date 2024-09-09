@@ -7,11 +7,6 @@ const AppBar = ({ onLanguageChange }) => {
     <div className="my-3 mb-14">
       <div className="flex justify-between items-center">
         <div className="flex justify-center items-center">
-          <div className="group  w-8 h-7 flex flex-col justify-between items-start">
-            <span className="bg-white w-full group-hover:w-5 h-1 duration-300 rounded-full" />
-            <span className="bg-white w-5 h-1 group-hover:w-full duration-300 rounded-full"></span>
-            <span className="bg-white w-full group-hover:w-6 h-1 duration-300 rounded-full"></span>
-          </div>
           <p className="text-3xl p-4 mx-2 font-bold text-white">Dashboard</p>
         </div>
         <div className="flex justify-center items-center px-10">

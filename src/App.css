@@ -1,3 +1,6 @@
+* {
+  font-family: "SUSE", sans-serif;
+}
 .select-none {
   user-select: none;
 }
