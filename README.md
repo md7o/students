@@ -1,8 +1,28 @@
 # Getting Started with Create React App
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+##Packages used
 
-## Available Scripts
+axios
+
+i18next
+
+react-datepicker
+
+react-dom
+
+react-i18next
+
+react-router-dom
+
+react-scripts
+
+swagger-jsdoc
+
+swagger-ui-express
+
+web-vitals.
+
+and use tailwind css library
 
 In the project directory, you can run:
 
