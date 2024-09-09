@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import AddModal from "../../components/modal/add_modal";
 import axios from "axios";
-import { getCookie } from "../../cookieUtils";
+import { getCookie } from "../../utils/cookieUtils";
 
 const AddStudents = ({
   showModal,

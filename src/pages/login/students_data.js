@@ -1,6 +1,5 @@
-import AppBar from "../../components/students_table_part/appbar";
-import StudentsData from "../../components/students_table_part/studentData";
-import SideBar from "../../components/students_table_part/sideBar";
+import StudentsData from "../../components/students_table_compontents/dashboard/student_dashboard";
+import SideBar from "../../components/students_table_compontents/sideBar";
 import React, { useState } from "react";
 
 const StudentsTable = () => {
@@ -10,8 +9,8 @@ const StudentsTable = () => {
     setLanguage(lang); // Update the language state
   };
   return (
-    <div className="bg-[#F3F6F9]">
-      <AppBar onLanguageChange={handleLanguageChange} />
+    <div className="bg-background">
+      {/* <AppBar onLanguageChange={handleLanguageChange} /> */}
       <div className="flex justify-between">
         <SideBar />
         <StudentsData lang={language} />
