@@ -185,22 +185,7 @@ const UpperDashboard = ({ lang }) => {
           />
         </div>
 
-        <div className="relative">
-          <img
-            src={search}
-            alt="Search icon"
-            className="absolute top-1/2 right-3 transform -translate-y-1/2 w-6"
-          />
-
-          <input
-            type="text"
-            value={isSearch}
-            onChange={searchName}
-            placeholder={t("search_place_holder")}
-            className=" py-2 rounded-xl px-5 text-xl"
-          />
-        </div>
-        <div className="flex justify-center items-center bg-background py-2 px-2 rounded-xl shadowing hover:bg-primary duration-300">
+        <div className="flex justify-center items-center bg-background py-2.5 px-2 rounded-xl shadowing hover:bg-primary duration-300">
           <img src={calendar} alt="Calendar icon" className="w-7 mx-3" />
           <DatePicker
             ref={datePickerRef}
@@ -219,13 +204,28 @@ const UpperDashboard = ({ lang }) => {
                 value={dateComparison}
                 onChange={handleComparisonChange}
                 className=" outline-none text-lg text-gray-700 mr-2"
-              >
+                >
                 <option value="Equal_to">{t("Equal_to")}</option>
                 <option value="Greater_than">{t("Greater_than")}</option>
                 <option value="Less_than">{t("Less_than")}</option>
-              </select>
-  
-              <div className="h-8 w-0.5 bg-gray-500 opacity-20 mx-4" /> */}
+                </select>
+                
+                <div className="h-8 w-0.5 bg-gray-500 opacity-20 mx-4" /> */}
+        <div className="relative">
+          <img
+            src={search}
+            alt="Search icon"
+            className="absolute top-1/2 right-3 transform -translate-y-1/2 w-6"
+          />
+
+          <input
+            type="text"
+            value={isSearch}
+            onChange={searchName}
+            placeholder={t("search_place_holder")}
+            className=" py-2 rounded-xl px-5 text-xl"
+          />
+        </div>
       </div>
     </div>
   );

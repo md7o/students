@@ -1,13 +1,26 @@
+import React from "react";
 import DropDownButton from "../widget/dropDownButton";
 import profile from "../../assets/images/metro.jpg";
-import React from "react";
 
-const AppBar = ({ onLanguageChange }) => {
+const AppBar = ({ onLanguageChange, currentPage }) => {
+  const getPageTitle = () => {
+    switch (currentPage) {
+      case "students":
+        return "Students Dashboard";
+      case "events":
+        return "Events Dashboard";
+      default:
+        return "Dashboard";
+    }
+  };
+
   return (
     <div className="my-3 mb-14">
       <div className="flex justify-between items-center">
         <div className="flex justify-center items-center">
-          <p className="text-3xl p-4 mx-2 font-bold text-white">Dashboard</p>
+          <p className="text-3xl p-4 mx-2 font-bold text-white">
+            {getPageTitle()}
+          </p>
         </div>
         <div className="flex justify-center items-center px-10">
           <p className="text-lg text-white font-bold">Aleksandar Mitrović</p>

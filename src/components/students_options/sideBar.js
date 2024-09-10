@@ -10,18 +10,21 @@ const optionsButton = [
   {
     icon: dashboardIcon,
     name: "Dashboard",
+    active: "students",
   },
   {
     icon: event,
     name: "Event",
+    active: "events",
   },
   {
     icon: openBook,
     name: "Courses",
+    active: "courses",
   },
 ];
 
-const SideBar = () => {
+const SideBar = ({ setActiveComponent }) => {
   const [showLogoutModal, setShowLogoutModal] = useState(false);
 
   const handleLogout = () => {
@@ -42,7 +45,10 @@ const SideBar = () => {
           <p className="text-2xl text-white font-bold my-5">Options</p>
           {optionsButton.map((items, index) => (
             <div key={index} className="my-5">
-              <button className="group flex justify-start items-center  w-72 bg-background rounded-lg p-4 hover:bg-primary shadowing duration-200">
+              <button
+                onClick={() => setActiveComponent(items.active)}
+                className="group flex justify-start items-center  w-72 bg-background rounded-lg p-4 hover:bg-primary shadowing duration-200"
+              >
                 <img
                   src={items.icon}
                   alt="Logout"

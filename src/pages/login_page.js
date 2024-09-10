@@ -1,6 +1,6 @@
-import people from "../../assets/images/people.png";
-import DropDownButton from "../../components/widget/dropDownButton";
-import spin from "../../assets/images/loading.png";
+import people from "../assets/images/people.png";
+import DropDownButton from "../components/widget/dropDownButton";
+import spin from "../assets/images/loading.png";
 import React, { useEffect, useState } from "react";
 import { Navigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";

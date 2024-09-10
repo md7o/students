@@ -5,8 +5,8 @@ import {
   Routes,
   Navigate,
 } from "react-router-dom";
-import LoginPage from "./pages/login/login_page";
-import StudentsDashboard from "./pages/login/students_data";
+import LoginPage from "./pages/login_page";
+import StudentsDashboard from "./pages/students_data";
 
 function App() {
   return (
