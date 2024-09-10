@@ -8,7 +8,7 @@ module.exports = {
         darkColor: "#070710",
         primary: "#6048E8",
         hovprimary: "#0D69E1",
-        shadowLine: "#E8E8E8",
+        shadowBlock: "#040110FF",
       },
       flex: {
         1.5: "1.2 1 0%",

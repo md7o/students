@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import dashboardIcon from "../../assets/images/dashboard.png";
 import event from "../../assets/images/event.png";
 import openBook from "../../assets/images/open-book.png";
+import metro from "../../assets/images/metro.jpg";
 import logout from "../../assets/images/logout.png";
 import LogoutModal from "../modal/logout_modal";
 import "../../App.css";
@@ -42,6 +43,22 @@ const SideBar = ({ setActiveComponent }) => {
     <div>
       <div className="h-screen flex flex-col justify-between m-5 bg-darkColor rounded-xl">
         <div className="mx-5">
+          <p className="text-4xl text-white font-bold mb-10 mt-5">App Logo</p>
+          {/* Account */}
+          <div className="my-5">
+            <button className="group flex justify-start items-center w-72 shadow-md shadow-shadowBlock bg-background rounded-lg p-4 hover:scale-95 duration-500">
+              <img
+                src={metro}
+                alt="metro"
+                className="w-14 h-14 object-cover rounded-xl mr-3"
+              />
+              <div className="flex flex-col items-start">
+                <p className="text-xl text-white ">Mohammed Ayman</p>
+                <p className="text-md text-white opacity-40">Admin</p>
+              </div>
+            </button>
+          </div>
+          {/* Option categories */}
           <p className="text-2xl text-white font-bold my-5">Options</p>
           {optionsButton.map((items, index) => (
             <div key={index} className="my-5">
@@ -60,6 +77,7 @@ const SideBar = ({ setActiveComponent }) => {
               </button>
             </div>
           ))}
+          {/* Other categories */}
           <p className="text-2xl text-white font-bold my-5 pt-5">Others</p>
           <div className="my-5">
             <button
