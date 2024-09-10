@@ -1,7 +1,9 @@
-import dashboardIcon from "../../assets/images/dashboard.png";
-import logout from "../../assets/images/logout.png";
 import React, { useState } from "react";
-import LogoutModal from "../../components/modal/logout_modal";
+import dashboardIcon from "../../assets/images/dashboard.png";
+import event from "../../assets/images/event.png";
+import openBook from "../../assets/images/open-book.png";
+import logout from "../../assets/images/logout.png";
+import LogoutModal from "../modal/logout_modal";
 import "../../App.css";
 
 const optionsButton = [
@@ -10,12 +12,12 @@ const optionsButton = [
     name: "Dashboard",
   },
   {
-    icon: dashboardIcon,
-    name: "Student",
+    icon: event,
+    name: "Event",
   },
   {
-    icon: dashboardIcon,
-    name: "Event",
+    icon: openBook,
+    name: "Courses",
   },
 ];
 

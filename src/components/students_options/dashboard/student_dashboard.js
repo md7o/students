@@ -6,7 +6,7 @@ import spin from "../../../assets/images/loading.png";
 import "react-datepicker/dist/react-datepicker.css";
 import { getCookie } from "../../../utils/cookieUtils";
 import { useTranslation } from "react-i18next";
-import AppBar from "./appbar";
+import AppBar from "../appbar";
 
 const StudentsData = ({ lang }) => {
   const { t, i18n } = useTranslation();
@@ -112,12 +112,12 @@ const StudentsData = ({ lang }) => {
   return (
     <div className="w-full">
       <AppBar />
-      <div className="bg-darkColor rounded-xl mx-8 p-14 drop-shadow-md">
+      <div className="bg-darkColor rounded-xl mx-8 p-20 px-32 drop-shadow-md">
+        {/* UpperDashboard ==========================================*/}
         <UpperDashboard />
         <div className="bg-gray-200 h-0.5 rounded-full mb-6" />
-
+        {/* TableDashboard ==========================================*/}
         <TableDashboard />
-
         <div className="bg-gray-200 h-1 my-6" />
         <div
           className={` ${

@@ -67,7 +67,7 @@ const TableDashboard = ({ lang }) => {
 
   return (
     <div>
-      <table className="w-full">
+      <table className="w-full rounded-lg overflow-hidden">
         <thead>
           <tr
             className={`bg-background text-white py-5 mb-5 rounded-lg uppercase text-sm ${

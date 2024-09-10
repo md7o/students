@@ -1,5 +1,5 @@
-import DropDownButton from "../../widget/dropDownButton";
-import profile from "../../../assets/images/metro.jpg";
+import DropDownButton from "../widget/dropDownButton";
+import profile from "../../assets/images/metro.jpg";
 import React from "react";
 
 const AppBar = ({ onLanguageChange }) => {

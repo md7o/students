@@ -1,5 +1,5 @@
-import StudentsData from "../../components/students_table_compontents/dashboard/student_dashboard";
-import SideBar from "../../components/students_table_compontents/sideBar";
+import StudentsData from "../../components/students_options/dashboard/student_dashboard";
+import SideBar from "../../components/students_options/sideBar";
 import React, { useState } from "react";
 
 const StudentsTable = () => {

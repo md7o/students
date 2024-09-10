@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import DatePicker from "react-datepicker";
-import AddStudents from "../../../modal/add_students";
+import AddStudents from "./add_students";
 import search from "../../../../assets/images/search.png";
 import calendar from "../../../../assets/images/calendar.png";
 import plus from "../../../../assets/images/plus.png";
