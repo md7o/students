@@ -9,21 +9,42 @@ import filter from "../../../../assets/images/filter.png";
 import spin from "../../../../assets/images/loading.png";
 import DeleteModal from "../../../modal/delete_modal";
 import { useTranslation } from "react-i18next";
-import { getCookie } from "../../../../utils/cookieUtils";
+// import { getCookie } from "../../../../utils/cookieUtils";
 
-const UpperDashboard = ({ lang }) => {
-  const { t, i18n } = useTranslation();
-  const [data, setData] = useState([]);
-  const [startDate, setStartDate] = useState(new Date());
+interface Student {
+  id?: string;
+  firstName: string;
+  lastName: string;
+  birthDate: string;
+  grade: string;
+  gender: string;
+  country: string;
+  city: string;
+  phone: string;
+  remarks: string;
+}
+
+interface StudentsDataProps {
+  lang: string;
+}
+
+const UpperDashboard: React.FC<StudentsDataProps> = ({ lang }) => {
+  const { t } = useTranslation();
+  const [data, setData] = useState<Student[]>([]);
+  const [startDate, setStartDate] = useState<Date | null>(new Date());
   const [showModal, setShowModal] = useState(false);
-  const [studentDataToEdit, setStudentDataToEdit] = useState(null);
+  const [studentDataToEdit, setStudentDataToEdit] = useState<Student | null>(
+    null
+  );
   const [showDeleteModal, setShowDeleteModal] = useState(false);
-  const [birthDateFilter, setBirthDateFilter] = useState(null);
-  const [isSearch, setIsSearch] = useState("");
-  const [studentIdToDelete, setStudentIdToDelete] = useState(null);
-  const [dateComparison, setDateComparison] = useState("Equal_to");
+  const [birthDateFilter, setBirthDateFilter] = useState<Date | null>(null);
+  const [isSearch, setIsSearch] = useState<string>("");
+  const [studentIdToDelete, setStudentIdToDelete] = useState<string | null>(
+    null
+  );
+  const [dateComparison, setDateComparison] = useState<string>("Equal_to");
+  const datePickerRef = useRef<DatePicker | null>(null);
 
-  const datePickerRef = useRef(null);
   const handleOpenModalForAdd = () => {
     setStudentDataToEdit(null);
     setShowModal(true);
@@ -33,24 +54,28 @@ const UpperDashboard = ({ lang }) => {
     setStudentDataToEdit(null);
   };
   const confirmDelete = () => {
-    handleDeleteStudent(studentIdToDelete);
-    setShowDeleteModal(false);
+    if (studentIdToDelete) {
+      handleDeleteStudent(studentIdToDelete);
+      setShowDeleteModal(false);
+    } else {
+      console.error("Student ID is null or undefined.");
+    }
   };
 
   const cancelDelete = () => {
     setShowDeleteModal(false);
   };
 
-  const searchName = (e) => {
+  const searchName = (e: React.ChangeEvent<HTMLInputElement>) => {
     setIsSearch(e.target.value);
   };
-  const handleComparisonChange = (e) => {
+  const handleComparisonChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setDateComparison(e.target.value);
   };
 
   // { Add Student } ==================================================
-  const addStudent = async (studentData) => {
-    const token = getCookie("authToken");
+  const addStudent = async (studentData: Student) => {
+    // const token = getCookie("authToken");
 
     try {
       await axios.post(
@@ -69,7 +94,7 @@ const UpperDashboard = ({ lang }) => {
         {
           headers: {
             Accept: "*/*",
-            Authorization: `Bearer ${token}`,
+            Authorization: `Bearer `,
             "Content-Type": "application/json",
           },
         }
@@ -82,8 +107,8 @@ const UpperDashboard = ({ lang }) => {
   };
 
   // { Edit Student } ==================================================
-  const handleEditStudent = async (updatedStudentData) => {
-    const token = getCookie("authToken");
+  const handleEditStudent = async (updatedStudentData: Student) => {
+    // const token = getCookie("authToken");
 
     try {
       await axios.put(
@@ -103,7 +128,7 @@ const UpperDashboard = ({ lang }) => {
         {
           headers: {
             Accept: "*/*",
-            Authorization: `Bearer ${token}`,
+            Authorization: `Bearer `,
             "Content-Type": "application/json",
           },
 
@@ -119,15 +144,15 @@ const UpperDashboard = ({ lang }) => {
   };
 
   // { Delete Student } ==================================================
-  const handleDeleteStudent = async (id) => {
+  const handleDeleteStudent = async (id: string) => {
     const url = "https://taxiapp.easybooks.me:8283/Student/Remove";
-    const token = getCookie("authToken");
+    // const token = getCookie("authToken");
 
     try {
       await axios.delete(url, {
         headers: {
           Accept: "application/json",
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer `,
         },
         params: {
           Id: id,
@@ -136,10 +161,11 @@ const UpperDashboard = ({ lang }) => {
 
       setData((prevData) => prevData.filter((student) => student.id !== id));
     } catch (error) {
-      console.error(
-        "Error deleting student:",
-        error.response ? error.response.data : error.message
-      );
+      if (error instanceof Error) {
+        console.error("Error:", error.message);
+      } else {
+        console.error("Unexpected error:", error);
+      }
     }
   };
 
@@ -178,9 +204,10 @@ const UpperDashboard = ({ lang }) => {
 
           <AddStudents
             showModal={showModal}
-            handleCloseModal={handleCloseModal}
+            handleCloseModal={() => setShowModal(false)}
             onAddStudent={addStudent}
-            editStudent={handleEditStudent}
+            isEditMode={!!studentDataToEdit}
+            onEditStudent={handleEditStudent}
             studentDataToEdit={studentDataToEdit}
           />
         </div>

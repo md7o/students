@@ -5,10 +5,10 @@ import AppBar from "../components/students_options/appbar";
 import React, { useState } from "react";
 
 const StudentsTable = () => {
-  const [language, setLanguage] = useState("en");
-  const [activeComponent, setActiveComponent] = useState("students");
+  const [language, setLanguage] = useState<string>("en");
+  const [activeComponent, setActiveComponent] = useState<string>("students");
 
-  const handleLanguageChange = (lang) => {
+  const handleLanguageChange = (lang: string) => {
     setLanguage(lang);
   };
   return (

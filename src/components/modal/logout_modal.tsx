@@ -1,6 +1,18 @@
 import logoutDoor from "../../assets/images/logoutDoor.png";
 
-const LogoutModal = ({ show, onClose, onConfirm, message }) => {
+interface AddLogouteModalProps {
+  show: boolean;
+  onClose: () => void;
+  onConfirm: () => void;
+  message?: string;
+}
+
+const LogoutModal: React.FC<AddLogouteModalProps> = ({
+  show,
+  onClose,
+  onConfirm,
+  message,
+}) => {
   if (!show) return null;
 
   return (

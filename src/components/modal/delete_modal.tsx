@@ -1,6 +1,17 @@
+import React, { ReactNode } from "react";
+
 import warning from "../../assets/images/warning.png";
 
-const DeleteModal = ({
+interface AddDeleteModalProps {
+  show: boolean;
+  onClose: () => void;
+  onConfirm: () => void;
+  title?: string;
+  message?: string;
+  warningMessage?: string;
+}
+
+const DeleteModal: React.FC<AddDeleteModalProps> = ({
   show,
   onClose,
   onConfirm,

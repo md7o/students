@@ -1,10 +1,13 @@
 import { useState, useEffect } from "react";
 
-const useFetch = (url, options = {}) => {
-  const [data, setData] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+interface FetchOptions extends RequestInit {
+  // You can specify other options if needed
+}
 
+const useFetch = (url: string, options?: FetchOptions) => {
+  const [data, setData] = useState<any>(null);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
   useEffect(() => {
     // Define an async function for fetching data
     const fetchData = async () => {
@@ -17,7 +20,11 @@ const useFetch = (url, options = {}) => {
         const result = await response.json();
         setData(result);
       } catch (err) {
-        setError(err.message);
+        if (err instanceof Error) {
+          setError(err.message);
+        } else {
+          setError("An unknown error occurred");
+        }
       } finally {
         setLoading(false);
       }

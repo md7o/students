@@ -7,6 +7,9 @@ import logout from "../../assets/images/logout.png";
 import LogoutModal from "../modal/logout_modal";
 import "../../App.css";
 
+interface SideBarProps {
+  setActiveComponent: (component: string) => void;
+}
 const optionsButton = [
   {
     icon: dashboardIcon,
@@ -25,7 +28,7 @@ const optionsButton = [
   },
 ];
 
-const SideBar = ({ setActiveComponent }) => {
+const SideBar: React.FC<SideBarProps> = ({ setActiveComponent }) => {
   const [showLogoutModal, setShowLogoutModal] = useState(false);
 
   const handleLogout = () => {

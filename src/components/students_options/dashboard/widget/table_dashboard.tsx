@@ -4,29 +4,45 @@ import pencil from "../../../../assets/images/pen.png";
 import "react-datepicker/dist/react-datepicker.css";
 import { useTranslation } from "react-i18next";
 
-const TableDashboard = ({ lang }) => {
+interface Student {
+  id: string;
+  firstName: string;
+  lastName: string;
+  birthDate: string;
+}
+
+interface StudentsTableDataProps {
+  lang: string;
+}
+
+const TableDashboard: React.FC<StudentsTableDataProps> = ({ lang }) => {
   const { t, i18n } = useTranslation();
-  const [data, setData] = useState([]);
-  const [isSearch, setIsSearch] = useState("");
+  const [data, setData] = useState<Student[]>([]);
+  const [isSearch, setIsSearch] = useState<string>("");
   const [showModal, setShowModal] = useState(false);
-  const [studentDataToEdit, setStudentDataToEdit] = useState(null);
+  const [studentDataToEdit, setStudentDataToEdit] = useState<Student | null>(
+    null
+  );
   const [showDeleteModal, setShowDeleteModal] = useState(false);
-  const [studentIdToDelete, setStudentIdToDelete] = useState(null);
-  const [rowsPerPage, setRowsPerPage] = useState(25);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [birthDateFilter, setBirthDateFilter] = useState(null);
-  const [dateComparison, setDateComparison] = useState("Equal_to");
+  const [studentIdToDelete, setStudentIdToDelete] = useState<string | null>(
+    null
+  );
+  const [rowsPerPage, setRowsPerPage] = useState<number>(25);
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [birthDateFilter, setBirthDateFilter] = useState<Date | null>(null);
+  const [dateComparison, setDateComparison] = useState<string>("Equal_to");
 
   const filteredData = data.filter((item) => {
     const itemDate = new Date(item.birthDate);
-    const filterDate = new Date(birthDateFilter);
+    const filterDate = birthDateFilter ? new Date(birthDateFilter) : null;
 
     const matchesName =
       item.firstName.toLowerCase().includes(isSearch.toLowerCase()) ||
       item.lastName.toLowerCase().includes(isSearch.toLowerCase());
 
     const matchesBirthDate = birthDateFilter
-      ? {
+      ? filterDate &&
+        {
           Equal_to: itemDate.toDateString() === filterDate.toDateString(),
           Greater_than: itemDate > filterDate,
           Less_than: itemDate < filterDate,
@@ -55,12 +71,12 @@ const TableDashboard = ({ lang }) => {
   //     indexOfLastStudent
   //   );
 
-  const handleOpenModalForEdit = (studentData) => {
+  const handleOpenModalForEdit = (studentData: Student) => {
     setStudentDataToEdit(studentData);
     setShowModal(true);
   };
 
-  const handleDeleteClick = (id) => {
+  const handleDeleteClick = (id: string) => {
     setStudentIdToDelete(id);
     setShowDeleteModal(true);
   };

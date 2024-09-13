@@ -1,11 +1,15 @@
 import people from "../assets/images/people.png";
 import DropDownButton from "../components/widget/dropDownButton";
 import spin from "../assets/images/loading.png";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, FormEvent } from "react";
 import { Navigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
-const LoginPage = ({ lang }) => {
+interface StudentsDataProps {
+  lang: string;
+}
+
+const LoginPage: React.FC<StudentsDataProps> = ({ lang }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -19,11 +23,11 @@ const LoginPage = ({ lang }) => {
     }
   }, [lang, i18n]);
 
-  const onLanguageChange = (newLang) => {
+  const onLanguageChange = (newLang: string) => {
     i18n.changeLanguage(newLang);
   };
 
-  const handleSubmit = async (event) => {
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setIsLoading(true);
 
@@ -62,7 +66,11 @@ const LoginPage = ({ lang }) => {
 
       setRedirect(true);
     } catch (error) {
-      setError(error.message);
+      if (error instanceof Error) {
+        setError(error.message);
+      } else {
+        setError("An unknown error occurred");
+      }
     }
   };
 

@@ -1,6 +1,12 @@
-import React from "react";
+import React, { ReactNode } from "react";
 
-const AddModal = ({ show, onClose, children }) => {
+interface AddModalProps {
+  show: boolean;
+  onClose: () => void;
+  children: ReactNode;
+}
+
+const AddModal: React.FC<AddModalProps> = ({ show, onClose, children }) => {
   if (!show) return null;
 
   return (

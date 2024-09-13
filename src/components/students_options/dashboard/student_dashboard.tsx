@@ -4,43 +4,61 @@ import UpperDashboard from "./widget/upper_dashboard";
 import TableDashboard from "./widget/table_dashboard";
 import spin from "../../../assets/images/loading.png";
 import "react-datepicker/dist/react-datepicker.css";
-import { getCookie } from "../../../utils/cookieUtils";
+// import { getCookie } from "../../../utils/cookieUtils";
 import { useTranslation } from "react-i18next";
 
-const StudentsData = ({ lang }) => {
+interface Student {
+  firstName: string;
+  lastName: string;
+  birthDate: string;
+  [key: string]: any; // In case there are other properties you're not listing here
+}
+
+interface StudentsDataProps {
+  lang: string;
+}
+
+const StudentsData: React.FC<StudentsDataProps> = ({ lang }) => {
   const { t, i18n } = useTranslation();
-  const [data, setData] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [isSearch, setIsSearch] = useState("");
+  const [data, setData] = useState<Student[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
+  const [isSearch, setIsSearch] = useState<string>("");
 
-  const [rowsPerPage, setRowsPerPage] = useState(25);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [birthDateFilter, setBirthDateFilter] = useState(null);
-  const [dateComparison, setDateComparison] = useState("Equal_to");
+  const [rowsPerPage, setRowsPerPage] = useState<number>(25);
+  const [currentPage, setCurrentPage] = useState<number>(1);
 
-  const filteredData = data.filter((item) => {
+  const [birthDateFilter, setBirthDateFilter] = useState<Date | null>(null);
+  const [dateComparison, setDateComparison] = useState<string>("Equal_to");
+
+  const filteredData = data.filter((item: Student) => {
     const itemDate = new Date(item.birthDate);
-    const filterDate = new Date(birthDateFilter);
+    const filterDate = birthDateFilter ? new Date(birthDateFilter) : null;
 
     const matchesName =
       item.firstName.toLowerCase().includes(isSearch.toLowerCase()) ||
       item.lastName.toLowerCase().includes(isSearch.toLowerCase());
 
-    const matchesBirthDate = birthDateFilter
+    const matchesBirthDate = filterDate
       ? {
           Equal_to: itemDate.toDateString() === filterDate.toDateString(),
           Greater_than: itemDate > filterDate,
           Less_than: itemDate < filterDate,
-        }[dateComparison] // dateComparison should be the value of your select dropdown
+        }[dateComparison]
       : true;
 
     return matchesName && matchesBirthDate;
   });
 
   useEffect(() => {
+    if (lang) {
+      i18n.changeLanguage(lang);
+    }
+  }, [lang, i18n]);
+
+  useEffect(() => {
     const fetchData = async () => {
-      const token = getCookie("authToken");
+      // const token = getCookie("authToken");
 
       try {
         const response = await axios.get(
@@ -48,7 +66,7 @@ const StudentsData = ({ lang }) => {
           {
             headers: {
               accept: "application/json",
-              Authorization: `Bearer ${token}`,
+              Authorization: `Bearer`,
             },
           }
         );
@@ -75,12 +93,12 @@ const StudentsData = ({ lang }) => {
   //   );
   // if (error) return <p>{error}</p>;
 
-  const handleRowsPerPageChange = (e) => {
+  const handleRowsPerPageChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setRowsPerPage(Number(e.target.value));
     setCurrentPage(1);
   };
 
-  const handlePageChange = (newPage) => {
+  const handlePageChange = (newPage: number) => {
     setCurrentPage(newPage);
   };
 
@@ -112,10 +130,10 @@ const StudentsData = ({ lang }) => {
     <div className="w-full">
       <div className="bg-darkColor rounded-xl mx-8 p-20 px-32 drop-shadow-md">
         {/* UpperDashboard ==========================================*/}
-        <UpperDashboard />
+        <UpperDashboard lang={lang} />
         <div className="bg-gray-200 h-0.5 rounded-full mb-6" />
         {/* TableDashboard ==========================================*/}
-        <TableDashboard />
+        <TableDashboard lang={lang} />
         <div className="bg-gray-200 h-1 my-6" />
         <div
           className={` ${

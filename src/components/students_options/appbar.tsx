@@ -2,7 +2,12 @@ import React from "react";
 import DropDownButton from "../widget/dropDownButton";
 import profile from "../../assets/images/metro.jpg";
 
-const AppBar = ({ onLanguageChange, currentPage }) => {
+interface AppBarProps {
+  onLanguageChange: (language: string) => void;
+  currentPage: string;
+}
+
+const AppBar: React.FC<AppBarProps> = ({ onLanguageChange, currentPage }) => {
   const getPageTitle = () => {
     switch (currentPage) {
       case "students":

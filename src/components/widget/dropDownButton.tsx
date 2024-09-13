@@ -1,6 +1,12 @@
 import React, { useState } from "react";
 
-const DropDownButton = ({ onLanguageChange }) => {
+interface DropDownButtonProps {
+  onLanguageChange: (language: string) => void;
+}
+
+const DropDownButton: React.FC<DropDownButtonProps> = ({
+  onLanguageChange,
+}) => {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedLanguage, setSelectedLanguage] = useState("English");
 
@@ -8,7 +14,7 @@ const DropDownButton = ({ onLanguageChange }) => {
     setIsOpen(!isOpen);
   };
 
-  const handleOptionClick = (language, label) => {
+  const handleOptionClick = (language: string, label: string) => {
     setSelectedLanguage(label);
     setIsOpen(false);
     onLanguageChange(language);

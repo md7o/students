@@ -1,19 +1,60 @@
 import React, { useState, useEffect, useRef } from "react";
-import AddModal from "../../../../components/modal/add_modal";
+import AddModal from "../../../modal/add_modal";
 import axios from "axios";
-import { getCookie } from "../../../../utils/cookieUtils";
+// import { getCookie } from "../../../../utils/cookieUtils";
 
-const AddStudents = ({
+interface Student {
+  firstName: string;
+  lastName: string;
+  birthDate: string;
+  grade: string;
+  gender: string;
+  country: string;
+  city: string;
+  phone: string;
+  remarks: string;
+  id?: string;
+  [key: string]: any;
+}
+
+interface AddStudentsProps {
+  showModal: boolean;
+  handleCloseModal: () => void;
+  onAddStudent: (studentData: Student) => void;
+  isEditMode?: boolean;
+  onEditStudent?: (studentData: Student) => void;
+  studentDataToEdit?: Student | null;
+}
+
+interface StudentFormData {
+  firstName: string;
+  lastName: string;
+  birthDate: string;
+  grade: string;
+  gender: string;
+  country: string;
+  city: string;
+  phone: string;
+  remarks: string;
+  [key: string]: string;
+}
+
+const AddStudents: React.FC<AddStudentsProps> = ({
   showModal,
   handleCloseModal,
   onAddStudent,
-  editStudent,
+  isEditMode,
+  onEditStudent,
   studentDataToEdit,
 }) => {
-  const [genders, setGenders] = useState([]);
-  const [grades, setGrades] = useState([]);
-  const dateInputRef = useRef(null);
-  const [formData, setFormData] = useState({
+  const [genders, setGenders] = useState<
+    { id: string; translations: { cultureCode: number; name: string }[] }[]
+  >([]);
+  const [grades, setGrades] = useState<
+    { id: string; translations: { cultureCode: number; name: string }[] }[]
+  >([]);
+  const dateInputRef = useRef<HTMLInputElement | null>(null);
+  const [formData, setFormData] = useState<StudentFormData>({
     firstName: "",
     lastName: "",
     birthDate: "",
@@ -24,19 +65,11 @@ const AddStudents = ({
     phone: "",
     remarks: "",
   });
-
-  const [errors, setErrors] = useState({});
-
-  const handleInputClick = () => {
-    if (dateInputRef.current) {
-      dateInputRef.current.focus(); // Ensure the input is focused
-      dateInputRef.current.showPicker(); // For modern browsers, trigger the date picker
-    }
-  };
+  const [errors, setErrors] = useState<Record<string, string>>({});
 
   useEffect(() => {
     const fetchGendersAndGrades = async () => {
-      const token = getCookie("authToken");
+      // const token = getCookie("authToken");
 
       try {
         const genderResponse = await axios.get(
@@ -44,7 +77,7 @@ const AddStudents = ({
           {
             headers: {
               accept: "application/json",
-              Authorization: `Bearer ${token}`,
+              Authorization: `Bearer `,
             },
           }
         );
@@ -53,7 +86,7 @@ const AddStudents = ({
           {
             headers: {
               accept: "application/json",
-              Authorization: `Bearer ${token}`,
+              Authorization: `Bearer `,
             },
           }
         );
@@ -62,6 +95,7 @@ const AddStudents = ({
         setGrades(gradeResponse.data);
       } catch (error) {
         console.error("Error fetching genders or grades:", error);
+        // Handle error properly, maybe show an alert or message to the user
       }
     };
 
@@ -86,15 +120,19 @@ const AddStudents = ({
 
   if (!showModal) return null;
 
-  const handleChange = (e) => {
+  const handleChange = (
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
+    >
+  ) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
-    setErrors({ ...errors, [name]: "" });
+    setErrors((prevErrors) => ({ ...prevErrors, [name]: "" }));
   };
 
   const validateForm = () => {
     let valid = true;
-    const requiredFields = [
+    const requiredFields: (keyof StudentFormData)[] = [
       "firstName",
       "lastName",
       "birthDate",
@@ -105,10 +143,10 @@ const AddStudents = ({
       "gender",
     ];
 
-    let newErrors = {};
+    const newErrors: Record<string, string> = {};
     requiredFields.forEach((field) => {
       if (!formData[field]) {
-        newErrors[field] = true;
+        newErrors[field] = "This field is required";
         valid = false;
       }
     });
@@ -117,11 +155,11 @@ const AddStudents = ({
     return valid;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (validateForm()) {
-      if (studentDataToEdit) {
-        editStudent(formData);
+      if (isEditMode && studentDataToEdit) {
+        onAddStudent(formData); // Ensure `onAddStudent` can handle editing
       } else {
         onAddStudent(formData);
       }
@@ -182,7 +220,7 @@ const AddStudents = ({
             name="birthDate"
             value={formData.birthDate}
             onChange={handleChange}
-            onClick={handleInputClick}
+            // onClick={handleInputClick}
             ref={dateInputRef}
             className={`w-full px-3 py-3 my-2 border rounded-xl text-black font-medium ring-1 cursor-pointer${
               errors.birthDate ? "ring-[#F34235]" : "ring-gray-300"
@@ -250,13 +288,12 @@ const AddStudents = ({
           {errors.city && <p className="text-[#F34235]">{errors.city}</p>}
         </div>
 
-        {/* Mobile and Gender */}
         <div>
           <label className="block text-gray-700 font-medium text-md">
-            Mobile<span className="text-2xl">*</span>
+            Phone<span className="text-2xl">*</span>
           </label>
           <input
-            type="tel"
+            type="text"
             name="phone"
             value={formData.phone}
             onChange={handleChange}
@@ -274,7 +311,7 @@ const AddStudents = ({
             name="gender"
             value={formData.gender}
             onChange={handleChange}
-            className={`w-full px-3 py-3 my-2 border rounded-xl font-medium ring-1 ${
+            className={`w-full px-3 py-3 my-2 border rounded-xl text-black font-medium ring-1 ${
               errors.gender ? "ring-[#F34235]" : "ring-gray-300"
             } bg-[#00000010]`}
           >
@@ -295,30 +332,23 @@ const AddStudents = ({
 
         <div className="col-span-2">
           <label className="block text-gray-700 font-medium text-md">
-            Note
+            Remarks
           </label>
           <textarea
             name="remarks"
             value={formData.remarks}
             onChange={handleChange}
-            className="w-full px-3 py-3 my-2 border rounded-xl min-h-44 text-black font-medium ring-1 ring-gray-300 bg-[#00000010]"
-            rows="4"
-          ></textarea>
+            rows={3}
+            className="w-full px-3 py-3 my-2 border rounded-xl ring-1 ring-gray-300 bg-[#00000010]"
+          />
         </div>
 
-        <div className="col-span-2 flex gap-4">
+        <div className="col-span-2 flex justify-end">
           <button
             type="submit"
-            className="w-full bg-primary text-white px-6 py-2 rounded-lg hover:bg-hovprimary duration-200"
+            className="bg-blue-500 text-white py-2 px-4 rounded"
           >
-            Add
-          </button>
-          <button
-            type="button"
-            onClick={handleCloseModal}
-            className="w-full bg-transparent ring-1 ring-primary text-primary px-6 py-2 rounded-lg"
-          >
-            Cancel
+            {isEditMode ? "Update Student" : "Add Student"}
           </button>
         </div>
       </form>
