@@ -13,9 +13,9 @@ const AppBar: React.FC<AppBarProps> = ({ onLanguageChange, currentPage }) => {
       case "students":
         return "Students Dashboard";
       case "events":
-        return "Events Dashboard";
+        return "Events";
       default:
-        return "Dashboard";
+        return "Courses";
     }
   };
 

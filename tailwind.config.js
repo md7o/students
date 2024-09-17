@@ -46,6 +46,8 @@ module.exports = {
         // => @media (min-width: 1536px) { ... }
         "2.5xl": "1800px",
         // => @media (min-width: 1800px) { ... }
+        "2.8xl": "2000px",
+        // => @media (min-width: 2000px) { ... }
         "3xl": "2500px",
         // => @media (min-width: 1700px) { ... }
       },

@@ -43,7 +43,7 @@ const SideBar: React.FC<SideBarProps> = ({ setActiveComponent }) => {
   };
 
   return (
-    <div>
+    <div className="xl:block hidden">
       <div className="h-screen flex flex-col justify-between m-5 bg-darkColor rounded-xl">
         <div className="mx-5">
           <p className="text-4xl text-white font-bold mb-10 mt-5">App Logo</p>
