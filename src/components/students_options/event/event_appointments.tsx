@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import AppBar from "../appbar";
 import RegisterModal from "../../modal/register_modal";
 import NoteBook from "../../../assets/images/notebook.png";
 import university from "../../../assets/images/school.png";
@@ -76,10 +75,6 @@ const EventAppointments = () => {
       }));
       setShowRegisterModal(false);
     }
-  };
-
-  const handleEmailClick = () => {
-    window.open("mailto:md7ohe@gmail.com", "_blank");
   };
 
   return (
