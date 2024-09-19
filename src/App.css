@@ -1,6 +1,9 @@
 * {
   font-family: "SUSE", sans-serif;
 }
+body {
+  background-color: #1b1c31;
+}
 .select-none {
   user-select: none;
 }

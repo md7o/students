@@ -174,10 +174,10 @@ const UpperDashboard: React.FC<StudentsDataProps> = ({ lang }) => {
       {/* <p className="text-3xl font-semibold">{t("Students_Data")}</p> */}
 
       <div
-        className={`mb-6 space-x-3 ${
+        className={`mb-6 ${
           lang === "en"
-            ? "flex flex-row-reverse items-center"
-            : "flex items-center"
+            ? "flex flex-row-reverse items-center gap-3"
+            : "flex items-center gap-3"
         }`}
       >
         <div
