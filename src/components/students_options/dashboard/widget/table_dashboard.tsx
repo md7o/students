@@ -4,22 +4,7 @@ import pencil from "../../../../assets/images/pen.png";
 import "react-datepicker/dist/react-datepicker.css";
 import { useTranslation } from "react-i18next";
 
-const demoTypeContent = [
-  "name",
-  "Birth Date",
-  "Gender",
-  "Country",
-  "College Majors",
-  "Phone",
-];
-const demoTableContent = [
-  "Mohammed Ayman",
-  "2004/04/10",
-  "Male",
-  "Syria",
-  "Computer Science",
-  "0551227021",
-];
+
 
 interface Student {
   id: string;
@@ -32,8 +17,37 @@ interface StudentsTableDataProps {
   lang: string;
 }
 
-const TableDashboard: React.FC<StudentsTableDataProps> = ({ lang }) => {
+const TableDashboard: React.FC<StudentsTableDataProps> = ({ lang, }) => {
   const { t, i18n } = useTranslation();
+  
+  const tableHeaders = [
+    t("Student_Name"),
+    t("Date_of_Birth"),
+    t("Gender"),
+    t("Country"),
+    t("College_Majors"),
+    t("Phone"),
+    t("Actions"),
+  ];
+  const tableRows = [
+    {
+      studentName: "Mohammed Ayman",
+      dob: "2004/04/10",
+      gender: "Male",
+      country: "Syria",
+      collegeMajors: "Computer Science",
+      phone: "0551227021",
+    },
+    {
+      studentName: "Jane Doe",
+      dob: "1995/12/01",
+      gender: "Female",
+      country: "USA",
+      collegeMajors: "Mathematics",
+      phone: "9876543210",
+    },
+  ];
+  
   const [data, setData] = useState<Student[]>([]);
   const [isSearch, setIsSearch] = useState<string>("");
   const [showModal, setShowModal] = useState(false);
@@ -100,150 +114,109 @@ const TableDashboard: React.FC<StudentsTableDataProps> = ({ lang }) => {
 
   return (
     <div>
-      <div className="lg:block hidden">
-        <table className="w-full rounded-lg overflow-hidden">
-          <thead>
-            <tr
-              className={`bg-background text-white py-5 mb-5 rounded-lg uppercase text-sm ${
-                lang === "en"
-                  ? "justify-center items-center "
-                  : "flex-row-reverse justify-center items-center"
-              }`}
-            >
-              <th className="px-6 py-3 text-left font-medium tracking-wider">
-                {t("Student_Name")}
-              </th>
-              <th className="px-6 py-3 text-left font-medium tracking-wider">
-                {t("Date_of_Birth")}
-              </th>
-              <th className="px-6 py-3 text-left font-medium tracking-wider">
-                {t("Gender")}
-              </th>
-              <th className="px-6 py-3 text-left font-medium tracking-wider">
-                {t("Country")}
-              </th>
-              <th className="px-6 py-3 text-left font-medium tracking-wider">
-                {t("College_Majors")}
-              </th>
-              <th className="px-6 py-3 text-left font-medium tracking-wider">
-                {t("Phone")}
-              </th>
-              <th className="px-6 py-3 text-left font-medium tracking-wider">
-                {t("Actions")}
-              </th>
-            </tr>
-          </thead>
+      <div className="lg:block hidden ">
+      <table className="w-full rounded-lg overflow-hidden ">
+      <thead >
+        <tr
+          className={`bg-background text-white py-5 mb-5 rounded-lg uppercase text-xs ${
+            lang === "en"
+              ? "justify-center items-center"
+              : "flex-row-reverse justify-center items-center"
+          }`}
+        >
+          {tableHeaders.map((header, index) => (
+            <th key={index} className="px-6 py-3 text-left font-medium tracking-wider">
+              {header}
+            </th>
+          ))}
+        </tr>
+      </thead>
 
-          <tbody className="bg-white divide-y divide-gray-200 text-lg">
-            {/* {currentStudents.map((item, index) => ( */}
-            <tr
-            //   key={item.id}
-            // className={`${index % 2 === 0 ? "bg-white" : "bg-gray-300"} ${
-            //   lang === "en" ? "" : "flex-row-reverse"
-            // }`}
-            >
-              <div className="flex items-center bg-white">
-                {demoTableContent.map((tableItems, index) => (
-                  <div className="">
-                    <p className=" px-6 py-3 whitespace-nowrap bg-white  text-gray-900">
-                      {tableItems}
-                    </p>
-                  </div>
-                ))}
+      <tbody className="bg-white divide-y divide-gray-200 text-md">
+        {tableRows.map((row, index) => (
+          <tr key={index}>
+            <td className="px-6 py-3 whitespace-nowrap text-gray-900">
+              {row.studentName}
+            </td>
+            <td className="px-6 py-3 whitespace-nowrap text-gray-900">
+              {row.dob}
+            </td>
+            <td className="px-6 py-3 whitespace-nowrap text-gray-900">
+              {row.gender}
+            </td>
+            <td className="px-6 py-3 whitespace-nowrap text-gray-900">
+              {row.country}
+            </td>
+            <td className="px-6 py-3 whitespace-nowrap text-gray-900">
+              {row.collegeMajors}
+            </td>
+            <td className="px-6 py-3 whitespace-nowrap text-gray-900">
+              {row.phone}
+            </td>
+            <td className="px-6 py-3 whitespace-nowrap text-gray-900">
+              <div className="flex gap-3 w-16">
+                <button className="text-blue-500 hover:text-blue-700 hover:scale-95 hover:brightness-75 duration-300">
+                  <img src={bin} alt="delete" className="" />
+                </button>
+                <button className="text-blue-500 hover:text-blue-700 hover:scale-95 hover:brightness-75 duration-300">
+                  <img src={pencil} alt="edit" />
+                </button>
               </div>
-              <td className="px-6 py-3 whitespace-nowrap  text-gray-900">
-                {/* {item.studentName || "N/A"} */}
-                {"Mohammed Ayman"}
-              </td>
-
-              <td className="px-6 py-3 whitespace-nowrap  text-gray-900">
-                {/* {item.birth?.translations?.[0]?.name || "N/A"} */}
-                {"2004/04/10"}
-              </td>
-              <td className="px-6 py-3 whitespace-nowrap  text-gray-900">
-                {/* {item.gender?.translations?.[0]?.name || "N/A"} */}
-                {"Male"}
-              </td>
-              <td className="px-6 py-3 whitespace-nowrap  text-gray-900">
-                {/* {item.country || "N/A"} */}
-                {"Syria"}
-              </td>
-              <td className="px-6 py-3 whitespace-nowrap  text-gray-900">
-                {/* {item.collegeMajors || "N/A"} */}
-                {"Computer Since"}
-              </td>
-              <td className="px-6 py-3 whitespace-nowrap  text-gray-900">
-                {/* {item.phone || "N/A"} */}
-                {"0551227021"}
-              </td>
-
-              <td className="px-6 py-3 whitespace-nowrap  text-gray-900">
-                <div className="flex gap-3 w-16 ">
-                  <button
-                    className="text-blue-500 hover:text-blue-700 hover:scale-95 hover:brightness-75 duration-300"
-                    //   onClick={() => handleDeleteClick(item.id)}
-                  >
-                    <img src={bin} alt="delete" className="" />
-                  </button>
-                  <button
-                    className="text-blue-500 hover:text-blue-700 hover:scale-95 hover:brightness-75 duration-300"
-                    //   onClick={() => handleOpenModalForEdit(item)}
-                  >
-                    <img src={pencil} alt="edit" />
-                  </button>
-                </div>
-              </td>
-            </tr>
-            {/* ))} */}
-          </tbody>
-        </table>
+            </td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
       </div>
-      <div className="lg:hidden">
-        <div className="space-y-4">
-          {/* Sample Data Block */}
-          <div className="bg-white p-4 rounded-lg shadow-md">
-            <div className="flex justify-between">
-              <p className="font-bold text-gray-800">{t("Student_Name")}:</p>
-              <p className="text-gray-600">{"Mohammed Ayman"}</p>
-            </div>
-            <div className="flex justify-between mt-2">
-              <p className="font-bold text-gray-800">{t("Date_of_Birth")}:</p>
-              <p className="text-gray-600">{"2004/04/10"}</p>
-            </div>
-            <div className="flex justify-between mt-2">
-              <p className="font-bold text-gray-800">{t("Gender")}:</p>
-              <p className="text-gray-600">{"Male"}</p>
-            </div>
-            <div className="flex justify-between mt-2">
-              <p className="font-bold text-gray-800">{t("Country")}:</p>
-              <p className="text-gray-600">{"Syria"}</p>
-            </div>
-            <div className="flex justify-between mt-2">
-              <p className="font-bold text-gray-800">{t("College_Majors")}:</p>
-              <p className="text-gray-600">{"Computer Science"}</p>
-            </div>
-            <div className="flex justify-between mt-2">
-              <p className="font-bold text-gray-800">{t("Phone")}:</p>
-              <p className="text-gray-600">{"0551227021"}</p>
-            </div>
-            <div className="mt-4 flex justify-end gap-3">
-              <button
-                className="text-blue-500 hover:text-blue-700 hover:scale-95 hover:brightness-75 duration-300"
-                // onClick={() => handleDeleteClick(item.id)}
-              >
-                <img src={bin} alt="delete" className="w-5 h-5" />
-              </button>
-              <button
-                className="text-blue-500 hover:text-blue-700 hover:scale-95 hover:brightness-75 duration-300"
-                // onClick={() => handleOpenModalForEdit(item)}
-              >
-                <img src={pencil} alt="edit" className="w-5 h-5" />
-              </button>
-            </div>
-          </div>
-          {/* Repeat the block for more rows */}
+      
+    
+  <div className="  bg-white rounded-lg flex justify-between items-center">
+    <div className="space-y-2 p-4">
+    {tableHeaders.map((header,index) => (
+        <p key={index} className="font-bold text-gray-800">{header}:</p>
+      ))}
+      </div>
+    
+    
+    {tableRows.map((row, index) => (
+      <div key={index} className="bg-white p-4 rounded-lg space-y-2">
+        <div className="flex justify-between">
+
+          <p className="text-gray-600">{row.studentName}</p>
+        </div>
+        <div className="flex justify-between mt-2">
+
+          <p className="text-gray-600">{row.dob}</p>
+        </div>
+        <div className="flex justify-between mt-2">
+
+          <p className="text-gray-600">{row.gender}</p>
+        </div>
+        <div className="flex justify-between mt-2">
+
+          <p className="text-gray-600">{row.country}</p>
+        </div>
+        <div className="flex justify-between mt-2">
+
+          <p className="text-gray-600">{row.collegeMajors}</p>
+        </div>
+        <div className="flex justify-between mt-2">
+          <p className="font-bold text-gray-800">{t("Phone")}:</p>
+          <p className="text-gray-600">{row.phone}</p>
+        </div>
+        <div className="mt-4 flex justify-end gap-3">
+          <button className="text-blue-500 hover:text-blue-700 hover:scale-95 hover:brightness-75 duration-300">
+            <img src={bin} alt="delete" className="w-5 h-5" />
+          </button>
+          <button className="text-blue-500 hover:text-blue-700 hover:scale-95 hover:brightness-75 duration-300">
+            <img src={pencil} alt="edit" className="w-5 h-5" />
+          </button>
         </div>
       </div>
+    ))}
+  </div>
+
+
     </div>
   );
 };
