@@ -128,7 +128,7 @@ const StudentsData: React.FC<StudentsDataProps> = ({ lang }) => {
 
   return (
     <div className="w-full ">
-      <div className="bg-darkColor  rounded-xl mx-8 p-20 px-32 drop-shadow-md">
+      <div className="bg-darkColor  rounded-xl xl:mx-8 p-20 xl:px-32 px-5 drop-shadow-md">
         {/* UpperDashboard ==========================================*/}
         <UpperDashboard lang={lang} />
         <div className="bg-gray-200 h-0.5 rounded-full mb-6" />
