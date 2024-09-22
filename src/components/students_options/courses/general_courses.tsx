@@ -135,17 +135,17 @@ const studentsPerSpecialty = [65, 5, 50, 15, 15, 20, 10, 20]; // Number of stude
 
 const GeneralCourses = () => {
   return (
-    <div className="flex justify-center gap-10 ">
+    <div className="flex justify-center gap-10">
       <div>
         {/* Courses Card */}
-        <div className="grid grid-cols-4 gap-5 justify-center  text-white rounded-xl ">
+        <div className="grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 gap-3 sm:justify-center justify-stretch text-white rounded-xl ">
           {majors.map((items, index) => (
             <div
               key={index}
-              className="flex flex-col justify-center items-center bg-darkColor rounded-xl w-full p-14 mx-3 space-y-5"
+              className="flex flex-col justify-center items-center bg-darkColor rounded-xl py-20 px-5  space-y-5"
             >
               <img src={items.imageUrl} alt={university} className="w-24" />
-              <p className="text-xl">{items.name}</p>
+              <p className="sm:text-lg text-xl">{items.name}</p>
               <button className="group bg-background text-xl px-10 py-1.5 rounded-lg shadowing hover:bg-primary duration-300">
                 <p className="text-white opacity-60 group-hover:opacity-100 duration-200">
                   Courses
@@ -155,7 +155,7 @@ const GeneralCourses = () => {
           ))}
         </div>
         {/* Most registered  */}
-        <div className=" bg-darkColor rounded-xl ml-3 mt-5 pb-5 text-white">
+        <div className=" bg-darkColor rounded-xl mt-5 pb-5 text-white">
           <p className="text-3xl p-5">Most registered courses</p>
           {majors.map((items, index) => {
             const percentage =
@@ -163,16 +163,18 @@ const GeneralCourses = () => {
             return (
               <div
                 key={index}
-                className="flex flex-row justify-start items-center space-x-6 py-5 px-14"
+                className="flex flex-row md:justify-start justify-between items-center space-x-6 py-5 px-14 "
               >
                 <p className="text-lg w-52">{items.name}</p>
-                <div className="flex-1 h-6 bg-gray-300 rounded-full overflow-hidden">
+                <div className="md:block hidden flex-1 h-6 bg-gray-300 rounded-full overflow-hidden">
                   <div
                     className="h-full bg-primary rounded-full"
                     style={{ width: `${percentage}%` }}
                   />
                 </div>
-                <p>{Math.round(percentage)}%</p>
+                <p className="md:text-base  text-xl ">
+                  {Math.round(percentage)}%
+                </p>
               </div>
             );
           })}

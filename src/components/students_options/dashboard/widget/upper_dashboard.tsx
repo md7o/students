@@ -170,14 +170,14 @@ const UpperDashboard: React.FC<StudentsDataProps> = ({ lang }) => {
   };
 
   return (
-    <div>
+    <div className="">
       {/* <p className="text-3xl font-semibold">{t("Students_Data")}</p> */}
 
       <div
         className={`mb-6 ${
           lang === "en"
-            ? "flex flex-row-reverse items-center gap-3"
-            : "flex items-center gap-3"
+            ? "sm:flex sm:flex-row sm:items-center gap-3 flex flex-col items-start"
+            : "sm:flex sm:flex-row-reverse sm:items-center gap-3 flex flex-col items-end"
         }`}
       >
         <div
@@ -188,7 +188,7 @@ const UpperDashboard: React.FC<StudentsDataProps> = ({ lang }) => {
           }`}
         >
           <button
-            className="flex justify-start items-center text-white bg-background rounded-xl px-5 py-3 hover:bg-primary shadowing duration-200"
+            className="flex justify-start items-center text-white xl:text-lg text-sm bg-background rounded-xl px-5 py-3 hover:bg-primary shadowing duration-200"
             onClick={handleOpenModalForAdd}
           >
             <img src={plus} alt="plus" className="w-4 ml-2 mr-4" />

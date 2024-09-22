@@ -117,7 +117,7 @@ const EventAppointments = () => {
           </div>
         </div>
       </div>
-      <div className="mx-14 w-full flex flex-col-reverse">
+      <div className="md:mx-14 mx-2 w-full flex flex-col-reverse">
         {eventsSchedule.map((items, index) => (
           <div
             key={index}
@@ -135,10 +135,10 @@ const EventAppointments = () => {
           >
             <div className="flex flex-col justify-between p-5 text-white">
               <div>
-                <p className="text-3xl">{items.eventName}</p>
-                <p className="text-xl">{items.eventDate}</p>
+                <p className="md:text-3xl text-2xl">{items.eventName}</p>
+                <p className="md:text-xl text-lg">{items.eventDate}</p>
               </div>
-              <p className="text-2xl">
+              <p className="md:text-2xl text-xl">
                 Number of participants: {items.participantsNum}
               </p>
             </div>
@@ -157,7 +157,7 @@ const EventAppointments = () => {
               {!registeredEvents[index] ? ( // Check if event is registered
                 <button
                   onClick={() => handleOpenModalForAdd(index)}
-                  className={`group bg-background rounded-lg p-4 hover:bg-primary hover:scale-95 shadowing duration-200 text-white text-2xl px-7 py-2 ${
+                  className={`group bg-background rounded-lg p-4 hover:bg-primary hover:scale-95 shadowing duration-200 text-white md:text-2xl px-7 py-2 ${
                     items.eventDate === eventDatePlus6Days ? "flex" : "hidden"
                   }`}
                 >

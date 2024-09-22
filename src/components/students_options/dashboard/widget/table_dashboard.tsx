@@ -4,31 +4,38 @@ import pencil from "../../../../assets/images/pen.png";
 import "react-datepicker/dist/react-datepicker.css";
 import { useTranslation } from "react-i18next";
 
-
-
 interface Student {
-  id: string;
-  firstName: string;
-  lastName: string;
-  birthDate: string;
+  studentName: string;
+  dob: string;
+  gender: string;
+  country: string;
+  collegeMajors: string;
+  phone: string;
 }
+
+type TableHeader = {
+  label: string;
+  key: keyof Student | "actions"; // Add "actions" for the action buttons
+};
 
 interface StudentsTableDataProps {
   lang: string;
 }
 
-const TableDashboard: React.FC<StudentsTableDataProps> = ({ lang, }) => {
+const TableDashboard: React.FC<StudentsTableDataProps> = ({ lang }) => {
   const { t, i18n } = useTranslation();
-  
-  const tableHeaders = [
-    t("Student_Name"),
-    t("Date_of_Birth"),
-    t("Gender"),
-    t("Country"),
-    t("College_Majors"),
-    t("Phone"),
-    t("Actions"),
+
+  const tableHeaders: TableHeader[] = [
+    { label: t("Student_Name"), key: "studentName" },
+    { label: t("Date_of_Birth"), key: "dob" },
+    { label: t("Gender"), key: "gender" },
+    { label: t("Country"), key: "country" },
+    { label: t("College_Majors"), key: "collegeMajors" },
+    { label: t("Phone"), key: "phone" },
+    { label: t("Actions"), key: "actions" }, // Actions for edit/delete
   ];
+
+  // Table rows as dynamic data
   const tableRows = [
     {
       studentName: "Mohammed Ayman",
@@ -47,7 +54,7 @@ const TableDashboard: React.FC<StudentsTableDataProps> = ({ lang, }) => {
       phone: "9876543210",
     },
   ];
-  
+
   const [data, setData] = useState<Student[]>([]);
   const [isSearch, setIsSearch] = useState<string>("");
   const [showModal, setShowModal] = useState(false);
@@ -63,25 +70,25 @@ const TableDashboard: React.FC<StudentsTableDataProps> = ({ lang, }) => {
   const [birthDateFilter, setBirthDateFilter] = useState<Date | null>(null);
   const [dateComparison, setDateComparison] = useState<string>("Equal_to");
 
-  const filteredData = data.filter((item) => {
-    const itemDate = new Date(item.birthDate);
-    const filterDate = birthDateFilter ? new Date(birthDateFilter) : null;
+  // const filteredData = data.filter((item) => {
+  //   const itemDate = new Date(item.birthDate);
+  //   const filterDate = birthDateFilter ? new Date(birthDateFilter) : null;
 
-    const matchesName =
-      item.firstName.toLowerCase().includes(isSearch.toLowerCase()) ||
-      item.lastName.toLowerCase().includes(isSearch.toLowerCase());
+  //   const matchesName =
+  //     item.firstName.toLowerCase().includes(isSearch.toLowerCase()) ||
+  //     item.lastName.toLowerCase().includes(isSearch.toLowerCase());
 
-    const matchesBirthDate = birthDateFilter
-      ? filterDate &&
-        {
-          Equal_to: itemDate.toDateString() === filterDate.toDateString(),
-          Greater_than: itemDate > filterDate,
-          Less_than: itemDate < filterDate,
-        }[dateComparison] // dateComparison should be the value of your select dropdown
-      : true;
+  //   const matchesBirthDate = birthDateFilter
+  //     ? filterDate &&
+  //       {
+  //         Equal_to: itemDate.toDateString() === filterDate.toDateString(),
+  //         Greater_than: itemDate > filterDate,
+  //         Less_than: itemDate < filterDate,
+  //       }[dateComparison] // dateComparison should be the value of your select dropdown
+  //     : true;
 
-    return matchesName && matchesBirthDate;
-  });
+  //   return matchesName && matchesBirthDate;
+  // });
 
   const handleNextPage = () => {
     if (currentPage < Math.ceil(data.length / rowsPerPage)) {
@@ -115,108 +122,97 @@ const TableDashboard: React.FC<StudentsTableDataProps> = ({ lang, }) => {
   return (
     <div>
       <div className="lg:block hidden ">
-      <table className="w-full rounded-lg overflow-hidden ">
-      <thead >
-        <tr
-          className={`bg-background text-white py-5 mb-5 rounded-lg uppercase text-xs ${
-            lang === "en"
-              ? "justify-center items-center"
-              : "flex-row-reverse justify-center items-center"
-          }`}
-        >
-          {tableHeaders.map((header, index) => (
-            <th key={index} className="px-6 py-3 text-left font-medium tracking-wider">
-              {header}
-            </th>
-          ))}
-        </tr>
-      </thead>
+        <table className="w-full rounded-lg overflow-hidden ">
+          <thead>
+            <tr
+              className={`bg-background text-white py-5 mb-5 rounded-lg uppercase text-xs `}
+            >
+              {tableHeaders.map((header, index) => (
+                <th
+                  key={index}
+                  className=" px-6 py-3 text-left font-medium tracking-wider"
+                >
+                  {header.label}
+                </th>
+              ))}
+            </tr>
+          </thead>
 
-      <tbody className="bg-white divide-y divide-gray-200 text-md">
-        {tableRows.map((row, index) => (
-          <tr key={index}>
-            <td className="px-6 py-3 whitespace-nowrap text-gray-900">
-              {row.studentName}
-            </td>
-            <td className="px-6 py-3 whitespace-nowrap text-gray-900">
-              {row.dob}
-            </td>
-            <td className="px-6 py-3 whitespace-nowrap text-gray-900">
-              {row.gender}
-            </td>
-            <td className="px-6 py-3 whitespace-nowrap text-gray-900">
-              {row.country}
-            </td>
-            <td className="px-6 py-3 whitespace-nowrap text-gray-900">
-              {row.collegeMajors}
-            </td>
-            <td className="px-6 py-3 whitespace-nowrap text-gray-900">
-              {row.phone}
-            </td>
-            <td className="px-6 py-3 whitespace-nowrap text-gray-900">
-              <div className="flex gap-3 w-16">
-                <button className="text-blue-500 hover:text-blue-700 hover:scale-95 hover:brightness-75 duration-300">
-                  <img src={bin} alt="delete" className="" />
-                </button>
-                <button className="text-blue-500 hover:text-blue-700 hover:scale-95 hover:brightness-75 duration-300">
-                  <img src={pencil} alt="edit" />
-                </button>
+          <tbody className="bg-white divide-y divide-gray-200 text-md">
+            {tableRows.map((row, index) => (
+              <tr key={index}>
+                <td className="px-6 py-3 whitespace-nowrap text-gray-900">
+                  {row.studentName}
+                </td>
+                <td className="px-6 py-3 whitespace-nowrap text-gray-900">
+                  {row.dob}
+                </td>
+                <td className="px-6 py-3 whitespace-nowrap text-gray-900">
+                  {row.gender}
+                </td>
+                <td className="px-6 py-3 whitespace-nowrap text-gray-900">
+                  {row.country}
+                </td>
+                <td className="px-6 py-3 whitespace-nowrap text-gray-900">
+                  {row.collegeMajors}
+                </td>
+                <td className="px-6 py-3 whitespace-nowrap text-gray-900">
+                  {row.phone}
+                </td>
+                <td className="px-6 py-3 whitespace-nowrap text-gray-900">
+                  <div className="flex gap-3 w-16">
+                    <button className="text-blue-500 hover:text-blue-700 hover:scale-95 hover:brightness-75 duration-300">
+                      <img src={bin} alt="delete" className="" />
+                    </button>
+                    <button className="text-blue-500 hover:text-blue-700 hover:scale-95 hover:brightness-75 duration-300">
+                      <img src={pencil} alt="edit" />
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      <div className="lg:hidden block">
+        {tableRows.map((row, rowIndex) => (
+          <div key={rowIndex}>
+            <div className=" rounded-lg shadow-md md:px-14 px-0">
+              <div className="space-y-2">
+                {tableHeaders.map((header, headerIndex) => (
+                  <div
+                    key={headerIndex}
+                    className="flex justify-between py-2 bg-background rounded-lg px-5"
+                    style={{ direction: lang === "en" ? "ltr" : "rtl" }}
+                  >
+                    <p className="font-medium text-white md:text-lg">
+                      {header.label}:
+                    </p>
+                    <p className="text-white font-light md:text-lg">
+                      {header.key === "actions" ? (
+                        <div className="flex gap-3">
+                          <button className="text-blue-500 hover:text-blue-700 hover:scale-95 hover:brightness-75 duration-300">
+                            <img src={pencil} alt="edit" className="w-5 h-5" />
+                          </button>
+                          <button className="text-red-500 hover:text-red-700 hover:scale-95 hover:brightness-75 duration-300">
+                            <img src={bin} alt="delete" className="w-5 h-5" />
+                          </button>
+                        </div>
+                      ) : (
+                        row[header.key]
+                      )}
+                    </p>
+                  </div>
+                ))}
               </div>
-            </td>
-          </tr>
+            </div>
+            {rowIndex < tableRows.length - 1 && (
+              <hr className="my-4 border-gray-500" />
+            )}
+          </div>
         ))}
-      </tbody>
-    </table>
       </div>
-      
-    
-  <div className="  bg-white rounded-lg flex justify-between items-center">
-    <div className="space-y-2 p-4">
-    {tableHeaders.map((header,index) => (
-        <p key={index} className="font-bold text-gray-800">{header}:</p>
-      ))}
-      </div>
-    
-    
-    {tableRows.map((row, index) => (
-      <div key={index} className="bg-white p-4 rounded-lg space-y-2">
-        <div className="flex justify-between">
-
-          <p className="text-gray-600">{row.studentName}</p>
-        </div>
-        <div className="flex justify-between mt-2">
-
-          <p className="text-gray-600">{row.dob}</p>
-        </div>
-        <div className="flex justify-between mt-2">
-
-          <p className="text-gray-600">{row.gender}</p>
-        </div>
-        <div className="flex justify-between mt-2">
-
-          <p className="text-gray-600">{row.country}</p>
-        </div>
-        <div className="flex justify-between mt-2">
-
-          <p className="text-gray-600">{row.collegeMajors}</p>
-        </div>
-        <div className="flex justify-between mt-2">
-          <p className="font-bold text-gray-800">{t("Phone")}:</p>
-          <p className="text-gray-600">{row.phone}</p>
-        </div>
-        <div className="mt-4 flex justify-end gap-3">
-          <button className="text-blue-500 hover:text-blue-700 hover:scale-95 hover:brightness-75 duration-300">
-            <img src={bin} alt="delete" className="w-5 h-5" />
-          </button>
-          <button className="text-blue-500 hover:text-blue-700 hover:scale-95 hover:brightness-75 duration-300">
-            <img src={pencil} alt="edit" className="w-5 h-5" />
-          </button>
-        </div>
-      </div>
-    ))}
-  </div>
-
-
     </div>
   );
 };

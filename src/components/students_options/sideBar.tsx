@@ -62,7 +62,7 @@ const SideBar: React.FC<SideBarProps> = ({
           showSideBar ? "translate-x-0" : "xl:translate-x-0 -translate-x-full"
         } transition-transform duration-300 ease-in-out z-50`}
       >
-        <div className="h-screen flex flex-col justify-between m-5 bg-darkColor rounded-xl">
+        <div className="h-screen flex flex-col justify-between sm:m-3 m-0 bg-darkColor rounded-xl">
           <div className="mx-5">
             <div className="flex justify-between items-center">
               <p className="text-4xl text-white font-bold mb-10 mt-5">

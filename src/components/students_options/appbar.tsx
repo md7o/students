@@ -30,17 +30,11 @@ const AppBar: React.FC<AppBarProps> = ({
       <div className="flex justify-between items-center">
         <div className="flex justify-center items-center">
           <MenuButton onClick={toggleSidebar} />
-          <p className="text-3xl p-4 mx-2 font-bold text-white">
+          <p className="xl:text-3xl p-4 sm:mx-2 mx-0 font-bold text-white">
             {getPageTitle()}
           </p>
         </div>
-        <div className="flex justify-center items-center px-10">
-          <p className="text-lg text-white font-bold">Aleksandar Mitrović</p>
-          <img
-            src={profile}
-            alt="Profile"
-            className=" w-10 h-10 object-cover rounded-xl mx-3"
-          />
+        <div className="sm:px-10 px-2">
           <DropDownButton onLanguageChange={onLanguageChange} />
         </div>
       </div>
