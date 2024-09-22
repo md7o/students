@@ -4,6 +4,8 @@ import UpperDashboard from "./widget/upper_dashboard";
 import TableDashboard from "./widget/table_dashboard";
 import spin from "../../../assets/images/loading.png";
 import "react-datepicker/dist/react-datepicker.css";
+import LogoutModal from "../../modal/logout_modal";
+
 // import { getCookie } from "../../../utils/cookieUtils";
 import { useTranslation } from "react-i18next";
 
@@ -30,6 +32,20 @@ const StudentsData: React.FC<StudentsDataProps> = ({ lang }) => {
 
   const [birthDateFilter, setBirthDateFilter] = useState<Date | null>(null);
   const [dateComparison, setDateComparison] = useState<string>("Equal_to");
+
+  const [showLogoutModal, setShowLogoutModal] = useState(false);
+  // const [closeSideBar, setCloseSideBar] = useState(true);
+
+  const handleLogout = () => {
+    console.log("User has logged out");
+    setShowLogoutModal(false);
+    localStorage.removeItem("authToken");
+    window.location.href = "/login";
+  };
+
+  const handleLogoutClick = () => {
+    setShowLogoutModal(true);
+  };
 
   const filteredData = data.filter((item: Student) => {
     const itemDate = new Date(item.birthDate);
@@ -199,6 +215,14 @@ const StudentsData: React.FC<StudentsDataProps> = ({ lang }) => {
             </button>
           </div>
         </div>
+        {showLogoutModal && (
+          <LogoutModal
+            show={showLogoutModal}
+            onClose={() => setShowLogoutModal(false)}
+            onConfirm={handleLogout}
+            message="Are you sure you want to log out of your account?"
+          />
+        )}
       </div>
     </div>
   );

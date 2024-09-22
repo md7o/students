@@ -135,14 +135,14 @@ const studentsPerSpecialty = [65, 5, 50, 15, 15, 20, 10, 20]; // Number of stude
 
 const GeneralCourses = () => {
   return (
-    <div className="flex justify-center gap-10">
+    <div className="flex justify-center gap-5">
       <div>
         {/* Courses Card */}
         <div className="grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 gap-3 sm:justify-center justify-stretch text-white rounded-xl ">
           {majors.map((items, index) => (
             <div
               key={index}
-              className="flex flex-col justify-center items-center bg-darkColor rounded-xl py-20 px-5  space-y-5"
+              className="flex flex-col justify-center items-center bg-darkColor rounded-xl py-20 2.8xl:px-12 px-5 space-y-5"
             >
               <img src={items.imageUrl} alt={university} className="w-24" />
               <p className="sm:text-lg text-xl">{items.name}</p>
@@ -199,7 +199,7 @@ const GeneralCourses = () => {
         </div>
       </div>
       {/* Countries Percentage */}
-      <div className="2.8xl:block hidden mr-10 w-1/3 bg-darkColor rounded-roundedButt">
+      <div className="2.5xl:block hidden mr-10 w-1/4 bg-darkColor rounded-roundedButt">
         <p className="m-6 text-white text-2xl">Most Countries Studient From</p>
         <div className="space-y-5">
           <div className="flex justify-between items-center mx-10">

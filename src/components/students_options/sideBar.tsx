@@ -12,6 +12,7 @@ interface SideBarProps {
   showSideBar: boolean;
   setActiveComponent: (component: string) => void;
   toggleSidebar: () => void;
+  onLogoutClick: () => void;
 }
 const optionsButton = [
   {
@@ -35,24 +36,9 @@ const SideBar: React.FC<SideBarProps> = ({
   showSideBar,
   setActiveComponent,
   toggleSidebar,
+  onLogoutClick,
 }) => {
   const [showLogoutModal, setShowLogoutModal] = useState(false);
-  // const [closeSideBar, setCloseSideBar] = useState(true);
-
-  const handleLogout = () => {
-    console.log("User has logged out");
-    setShowLogoutModal(false);
-    localStorage.removeItem("authToken");
-    window.location.href = "/login";
-  };
-
-  const handleLogoutClick = () => {
-    setShowLogoutModal(true);
-  };
-
-  // const handleSideBarShow = () => {
-  //   setCloseSideBar(true);
-  // };
 
   return (
     <div>
@@ -112,7 +98,7 @@ const SideBar: React.FC<SideBarProps> = ({
             <p className="text-2xl text-white font-bold my-5 pt-5">Others</p>
             <div className="my-5">
               <button
-                onClick={handleLogoutClick}
+                onClick={onLogoutClick}
                 className="group flex justify-start items-center  w-72 bg-background rounded-lg p-4 hover:bg-primary shadowing duration-200"
               >
                 <img
@@ -127,15 +113,6 @@ const SideBar: React.FC<SideBarProps> = ({
             </div>
           </div>
         </div>
-
-        {showLogoutModal && (
-          <LogoutModal
-            show={showLogoutModal}
-            onClose={() => setShowLogoutModal(false)}
-            onConfirm={handleLogout}
-            message="Are you sure you want to log out of your account?"
-          />
-        )}
       </div>
     </div>
   );

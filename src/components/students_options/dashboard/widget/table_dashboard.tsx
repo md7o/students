@@ -15,7 +15,7 @@ interface Student {
 
 type TableHeader = {
   label: string;
-  key: keyof Student | "actions"; // Add "actions" for the action buttons
+  key: keyof Student | "actions";
 };
 
 interface StudentsTableDataProps {
@@ -55,20 +55,20 @@ const TableDashboard: React.FC<StudentsTableDataProps> = ({ lang }) => {
     },
   ];
 
-  const [data, setData] = useState<Student[]>([]);
-  const [isSearch, setIsSearch] = useState<string>("");
-  const [showModal, setShowModal] = useState(false);
-  const [studentDataToEdit, setStudentDataToEdit] = useState<Student | null>(
-    null
-  );
-  const [showDeleteModal, setShowDeleteModal] = useState(false);
-  const [studentIdToDelete, setStudentIdToDelete] = useState<string | null>(
-    null
-  );
-  const [rowsPerPage, setRowsPerPage] = useState<number>(25);
-  const [currentPage, setCurrentPage] = useState<number>(1);
-  const [birthDateFilter, setBirthDateFilter] = useState<Date | null>(null);
-  const [dateComparison, setDateComparison] = useState<string>("Equal_to");
+  // const [data, setData] = useState<Student[]>([]);
+  // const [isSearch, setIsSearch] = useState<string>("");
+  // const [showModal, setShowModal] = useState(false);
+  // const [studentDataToEdit, setStudentDataToEdit] = useState<Student | null>(
+  //   null
+  // );
+  // const [showDeleteModal, setShowDeleteModal] = useState(false);
+  // const [studentIdToDelete, setStudentIdToDelete] = useState<string | null>(
+  //   null
+  // );
+  // const [rowsPerPage, setRowsPerPage] = useState<number>(25);
+  // const [currentPage, setCurrentPage] = useState<number>(1);
+  // const [birthDateFilter, setBirthDateFilter] = useState<Date | null>(null);
+  // const [dateComparison, setDateComparison] = useState<string>("Equal_to");
 
   // const filteredData = data.filter((item) => {
   //   const itemDate = new Date(item.birthDate);
@@ -90,17 +90,17 @@ const TableDashboard: React.FC<StudentsTableDataProps> = ({ lang }) => {
   //   return matchesName && matchesBirthDate;
   // });
 
-  const handleNextPage = () => {
-    if (currentPage < Math.ceil(data.length / rowsPerPage)) {
-      setCurrentPage(currentPage + 1);
-    }
-  };
+  // const handleNextPage = () => {
+  //   if (currentPage < Math.ceil(data.length / rowsPerPage)) {
+  //     setCurrentPage(currentPage + 1);
+  //   }
+  // };
 
-  const handlePreviousPage = () => {
-    if (currentPage > 1) {
-      setCurrentPage(currentPage - 1);
-    }
-  };
+  // const handlePreviousPage = () => {
+  //   if (currentPage > 1) {
+  //     setCurrentPage(currentPage - 1);
+  //   }
+  // };
 
   //   const indexOfLastStudent = currentPage * rowsPerPage;
   //   const indexOfFirstStudent = indexOfLastStudent - rowsPerPage;
@@ -109,15 +109,15 @@ const TableDashboard: React.FC<StudentsTableDataProps> = ({ lang }) => {
   //     indexOfLastStudent
   //   );
 
-  const handleOpenModalForEdit = (studentData: Student) => {
-    setStudentDataToEdit(studentData);
-    setShowModal(true);
-  };
+  // const handleOpenModalForEdit = (studentData: Student) => {
+  //   setStudentDataToEdit(studentData);
+  //   setShowModal(true);
+  // };
 
-  const handleDeleteClick = (id: string) => {
-    setStudentIdToDelete(id);
-    setShowDeleteModal(true);
-  };
+  // const handleDeleteClick = (id: string) => {
+  //   setStudentIdToDelete(id);
+  //   setShowDeleteModal(true);
+  // };
 
   return (
     <div>
