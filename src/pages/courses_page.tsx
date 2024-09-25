@@ -1,15 +1,12 @@
-import StudentsData from "../components/students_options/dashboard/student_dashboard";
-import EventAppointments from "../components/students_options/event/event_appointments";
-import GeneralCourses from "../components/students_options/courses/general_courses";
-import SideBar from "../components/students_options/sideBar";
-import AppBar from "../components/students_options/appbar";
-import LogoutModal from "../components/modal/logout_modal";
 import React, { useState } from "react";
+import AppBar from "../components/students_options/appbar";
+import SideBar from "../components/students_options/sideBar";
+import GeneralCourses from "../components/students_options/courses/general_courses";
+import LogoutModal from "../components/modal/logout_modal";
 
-const StudentsTable = () => {
+const CoursesPage = () => {
   const [language, setLanguage] = useState<string>("en");
-  const [activeComponent, setActiveComponent] = useState<string>("students");
-  const [showSideBar, setShowSideBar] = useState<boolean>(false); // State to control sidebar
+  const [showSideBar, setShowSideBar] = useState<boolean>(false);
   const [showLogoutModal, setShowLogoutModal] = useState(false);
 
   const handleLogout = () => {
@@ -32,25 +29,22 @@ const StudentsTable = () => {
   return (
     <div className="bg-background">
       <div className="flex justify-between">
-        {/* Pass showSideBar and handleSideBarShow */}
         <SideBar
-          setActiveComponent={setActiveComponent}
+          setActiveComponent={() => {}}
           showSideBar={showSideBar}
           toggleSidebar={handleSideBarShow}
           onLogoutClick={handleShowModal}
+          onLanguageChange={handleLanguageChange}
+          language={language}
         />
         <div className="w-full justify-between items-start">
-          {/* Pass handleSideBarShow to AppBar */}
           <AppBar
             onLanguageChange={handleLanguageChange}
-            currentPage={activeComponent}
-            toggleSidebar={handleSideBarShow} // Pass the function
+            currentPage="courses"
+            toggleSidebar={handleSideBarShow}
+            language={language}
           />
-          <div>
-            {activeComponent === "students" && <StudentsData lang={language} />}
-            {activeComponent === "events" && <EventAppointments />}
-            {activeComponent === "courses" && <GeneralCourses />}
-          </div>
+          <GeneralCourses lang={language} />
         </div>
         {showLogoutModal && (
           <LogoutModal
@@ -65,4 +59,4 @@ const StudentsTable = () => {
   );
 };
 
-export default StudentsTable;
+export default CoursesPage;

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import MenuButton from "../../components/widget/menu_button";
+import { useNavigate } from "react-router-dom";
 import dashboardIcon from "../../assets/images/dashboard.png";
 import event from "../../assets/images/event.png";
 import openBook from "../../assets/images/open-book.png";
@@ -9,40 +9,55 @@ import LogoutModal from "../modal/logout_modal";
 import "../../App.css";
 
 interface SideBarProps {
-  showSideBar: boolean;
   setActiveComponent: (component: string) => void;
+  showSideBar: boolean;
   toggleSidebar: () => void;
   onLogoutClick: () => void;
+  language: string;
+  onLanguageChange: (language: string) => void;
 }
-const optionsButton = [
-  {
-    icon: dashboardIcon,
-    name: "Dashboard",
-    active: "students",
-  },
-  {
-    icon: event,
-    name: "Event",
-    active: "events",
-  },
-  {
-    icon: openBook,
-    name: "Courses",
-    active: "courses",
-  },
-];
+
+// interface StudentsDataProps {
+//   lang: string;
+// }
 
 const SideBar: React.FC<SideBarProps> = ({
-  showSideBar,
   setActiveComponent,
+  showSideBar,
   toggleSidebar,
   onLogoutClick,
+  language,
+  onLanguageChange,
 }) => {
-  const [showLogoutModal, setShowLogoutModal] = useState(false);
+  const navigate = useNavigate();
+
+  const optionsButton = [
+    {
+      icon: dashboardIcon,
+      name: language === "en" ? "Dashboard" : "لوحة تحكم الطلاب",
+      route: "/dashboard",
+    },
+    {
+      icon: event,
+      name: language === "en" ? "Event" : "الفعاليات",
+      route: "/events",
+    },
+    {
+      icon: openBook,
+      name: language === "en" ? "Courses" : "الدورات",
+      route: "/courses",
+    },
+  ];
+
+  const handleNavigation = (route: string) => {
+    navigate(route);
+    if (!showSideBar) {
+      toggleSidebar(); // Close sidebar after navigating (optional)
+    }
+  };
 
   return (
     <div>
-      {/* <MenuButton onClick={handleSideBarShow} /> */}
       <div
         className={`xl:relative fixed top-0 left-0 transform ${
           showSideBar ? "translate-x-0" : "xl:translate-x-0 -translate-x-full"
@@ -71,7 +86,9 @@ const SideBar: React.FC<SideBarProps> = ({
                 />
                 <div className="flex flex-col items-start">
                   <p className="text-xl text-white ">Mohammed Ayman</p>
-                  <p className="text-md text-white opacity-40">Admin</p>
+                  <p className="text-md text-white opacity-40">
+                    {language === "en" ? "admin" : "sdasd"}
+                  </p>
                 </div>
               </button>
             </div>
@@ -80,15 +97,16 @@ const SideBar: React.FC<SideBarProps> = ({
             {optionsButton.map((items, index) => (
               <div key={index} className="my-5">
                 <button
-                  onClick={() => setActiveComponent(items.active)}
+                  onClick={() => handleNavigation(items.route)}
                   className="group flex justify-start items-center  w-72 bg-background rounded-lg p-4 hover:bg-primary shadowing duration-200"
+                  style={{ direction: language === "en" ? "ltr" : "rtl" }}
                 >
                   <img
                     src={items.icon}
                     alt="Logout"
-                    className="w-6 opacity-40 group-hover:opacity-100"
+                    className="w-6 opacity-60 group-hover:opacity-100"
                   />
-                  <p className="text-xl text-white opacity-40 group-hover:opacity-100 px-6">
+                  <p className="text-xl text-white opacity-60 group-hover:opacity-100 px-6">
                     {items.name}
                   </p>
                 </button>
@@ -100,14 +118,15 @@ const SideBar: React.FC<SideBarProps> = ({
               <button
                 onClick={onLogoutClick}
                 className="group flex justify-start items-center  w-72 bg-background rounded-lg p-4 hover:bg-primary shadowing duration-200"
+                style={{ direction: language === "en" ? "ltr" : "rtl" }}
               >
                 <img
                   src={logout}
                   alt="Logout"
-                  className="w-6 opacity-40 group-hover:opacity-100"
+                  className="w-6 opacity-60 group-hover:opacity-100"
                 />
-                <p className="text-xl text-white opacity-40 group-hover:opacity-100 px-6">
-                  Logout
+                <p className="text-xl text-white opacity-60 group-hover:opacity-100 px-6">
+                  {language === "en" ? " Logout" : "تسجيل الخروج"}
                 </p>
               </button>
             </div>

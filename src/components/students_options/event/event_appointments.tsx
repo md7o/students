@@ -10,6 +10,10 @@ import {
   subtractDaysFromDate,
 } from "../../../utils/date";
 
+interface eventsLanguage {
+  lang: string;
+}
+
 const currentDate = getCurrentDate("YYYY/MM/DD");
 
 const eventDatePlus6Days = formatDate(
@@ -20,35 +24,7 @@ const eventDatePlus6Days = formatDate(
 const getEventDate = (daysToSubtract: number) =>
   formatDate(subtractDaysFromDate(new Date(), daysToSubtract), "YYYY/MM/DD");
 
-const eventsSchedule = [
-  {
-    eventName: "Graduation",
-    eventDate: getEventDate(3),
-    participantsNum: 23,
-  },
-  {
-    eventName: "Graduation",
-    eventDate: getEventDate(2),
-    participantsNum: 15,
-  },
-  {
-    eventName: "Graduation",
-    eventDate: getEventDate(1),
-    participantsNum: 74,
-  },
-  {
-    eventName: "Graduation",
-    eventDate: currentDate,
-    participantsNum: 54,
-  },
-  {
-    eventName: "Graduation",
-    eventDate: eventDatePlus6Days,
-    participantsNum: 23,
-  },
-];
-
-const EventAppointments = () => {
+const EventAppointments: React.FC<eventsLanguage> = ({ lang }) => {
   const [showRegisterModal, setShowRegisterModal] = useState(false);
   const [confirmRegistering, setConfirmRegistering] = useState<number | null>(
     null
@@ -57,6 +33,33 @@ const EventAppointments = () => {
     [key: number]: boolean;
   }>({});
 
+  const eventsSchedule = [
+    {
+      eventName: lang === "en" ? "Graduation" : "التخرج",
+      eventDate: getEventDate(3),
+      participantsNum: 23,
+    },
+    {
+      eventName: "Graduation",
+      eventDate: getEventDate(2),
+      participantsNum: 15,
+    },
+    {
+      eventName: "Graduation",
+      eventDate: getEventDate(1),
+      participantsNum: 74,
+    },
+    {
+      eventName: "Graduation",
+      eventDate: currentDate,
+      participantsNum: 54,
+    },
+    {
+      eventName: lang === "en" ? "Graduation" : "التخرج",
+      eventDate: eventDatePlus6Days,
+      participantsNum: 23,
+    },
+  ];
   const handleOpenModalForAdd = (index: number) => {
     setConfirmRegistering(index);
     setShowRegisterModal(true);
@@ -78,17 +81,32 @@ const EventAppointments = () => {
   };
 
   return (
-    <div className="flex flex-row-reverse justify-between items-start mb-10">
-      <div className="2.8xl:block hidden pb-10 mt-5 mr-10 w-1/3 bg-darkColor rounded-roundedButt">
-        <p className="m-6 text-white text-xl">For contact and inquiries</p>
+    <div
+      className="flex flex-row-reverse justify-between items-start mb-10"
+      style={{ direction: lang === "en" ? "ltr" : "rtl" }}
+    >
+      <div
+        className={`2.8xl:block hidden pb-10 mt-5  w-1/3 bg-darkColor rounded-roundedButt ${
+          lang === "en" ? "mr-10" : "ml-10"
+        }`}
+      >
+        <p className="m-6 text-white text-xl">
+          {lang === "en" ? "For contact and inquiries" : "للتواصل والاستفسار"}
+        </p>
         <div className="space-y-5">
           {/* Events leader */}
           <div className="flex justify-between items-center mx-10">
             <div className="flex justify-center items-center gap-5 hover:scale-95 duration-700 cursor-default ">
               <img src={NoteBook} alt={NoteBook} className="w-14" />
               <div>
-                <p className="text-white text-xl">Events Laeder</p>
-                <p className="text-white text-md">Work hours: 8am - 4pm</p>
+                <p className="text-white text-xl">
+                  {lang === "en" ? "Events Laeder" : "مدير الفعاليات"}
+                </p>
+                <p className="text-white text-md">
+                  {lang === "en"
+                    ? "Work hours: 8am - 4pm"
+                    : "ساعات العمل: 8 صباحًا - 4 مساءً"}
+                </p>
               </div>
             </div>
             <a
@@ -96,7 +114,7 @@ const EventAppointments = () => {
               className="group bg-background text-xl px-5 py-1 rounded-lg shadowing hover:bg-primary duration-300"
             >
               <p className="text-white opacity-60 group-hover:opacity-100 duration-200">
-                Email
+                {lang === "en" ? "Email" : "ايميل"}
               </p>
             </a>
           </div>
@@ -105,13 +123,19 @@ const EventAppointments = () => {
             <div className="flex justify-center items-center gap-5 hover:scale-95 duration-700 cursor-default">
               <img src={university} alt={university} className="w-14" />
               <div>
-                <p className="text-white text-xl">Events official</p>
-                <p className="text-white text-md">Work hours: 8am - 4pm</p>
+                <p className="text-white text-xl">
+                  {lang === "en" ? "Events official" : "مسؤول الفعاليات"}
+                </p>
+                <p className="text-white text-md">
+                  {lang === "en"
+                    ? "Work hours: 8am - 4pm"
+                    : "ساعات العمل: 8 صباحًا - 4 مساءً"}
+                </p>
               </div>
             </div>
             <button className="group bg-background text-xl px-5 py-1 rounded-lg shadowing hover:bg-primary duration-300">
               <p className="text-white opacity-60 group-hover:opacity-100 duration-200">
-                Email
+                {lang === "en" ? "Email" : "ايميل"}
               </p>
             </button>
           </div>
@@ -139,7 +163,9 @@ const EventAppointments = () => {
                 <p className="md:text-xl text-lg">{items.eventDate}</p>
               </div>
               <p className="md:text-2xl text-xl">
-                Number of participants: {items.participantsNum}
+                {lang === "en"
+                  ? `Number of participants: ${items.participantsNum}`
+                  : `عدد الحضور: ${items.participantsNum}`}
               </p>
             </div>
             <div className="flex flex-col justify-between items-end p-5">
@@ -161,14 +187,14 @@ const EventAppointments = () => {
                     items.eventDate === eventDatePlus6Days ? "flex" : "hidden"
                   }`}
                 >
-                  Register
+                  {lang === "en" ? "Registration" : "تسجيل"}
                 </button>
               ) : (
                 <button
                   disabled
                   className="bg-darkColor opacity-40 cursor-not-allowed rounded-lg p-4 text-white text-2xl px-7 py-2"
                 >
-                  Registered
+                  {lang === "en" ? "Registered" : "مسجل"}
                 </button>
               )}
             </div>

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import bin from "../../../../assets/images/trash.png";
 import pencil from "../../../../assets/images/pen.png";
 import "react-datepicker/dist/react-datepicker.css";
