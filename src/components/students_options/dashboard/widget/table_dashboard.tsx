@@ -9,7 +9,7 @@ interface Student {
   dob: string;
   gender: string;
   country: string;
-  collegeMajors: string;
+  collegeMajor: string;
   phone: string;
 }
 
@@ -30,7 +30,7 @@ const TableDashboard: React.FC<StudentsTableDataProps> = ({ lang }) => {
     { label: t("Date_of_Birth"), key: "dob" },
     { label: t("Gender"), key: "gender" },
     { label: t("Country"), key: "country" },
-    { label: t("College_Majors"), key: "collegeMajors" },
+    { label: t("College Major"), key: "collegeMajor" },
     { label: t("Phone"), key: "phone" },
     { label: t("Actions"), key: "actions" }, // Actions for edit/delete
   ];
@@ -42,7 +42,7 @@ const TableDashboard: React.FC<StudentsTableDataProps> = ({ lang }) => {
       dob: "2004/04/10",
       gender: "Male",
       country: "Syria",
-      collegeMajors: "Computer Science",
+      collegeMajor: "Computer Science",
       phone: "0551227021",
     },
     {
@@ -50,7 +50,7 @@ const TableDashboard: React.FC<StudentsTableDataProps> = ({ lang }) => {
       dob: "1995/12/01",
       gender: "Female",
       country: "USA",
-      collegeMajors: "Mathematics",
+      collegeMajor: "Mathematics",
       phone: "9876543210",
     },
   ];
@@ -154,7 +154,7 @@ const TableDashboard: React.FC<StudentsTableDataProps> = ({ lang }) => {
                   {row.country}
                 </td>
                 <td className="px-6 py-3 whitespace-nowrap text-gray-900">
-                  {row.collegeMajors}
+                  {row.collegeMajor}
                 </td>
                 <td className="px-6 py-3 whitespace-nowrap text-gray-900">
                   {row.phone}

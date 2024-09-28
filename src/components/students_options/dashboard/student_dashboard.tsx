@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import UpperDashboard from "./widget/upper_dashboard";
 import TableDashboard from "./widget/table_dashboard";
+import InfoFlowChart from "./widget/info_flowchart";
 import spin from "../../../assets/images/loading.png";
 import "react-datepicker/dist/react-datepicker.css";
 import LogoutModal from "../../modal/logout_modal";
@@ -144,6 +145,7 @@ const StudentsData: React.FC<StudentsDataProps> = ({ lang }) => {
 
   return (
     <div className="w-full ">
+      <InfoFlowChart />
       <div className="bg-darkColor  rounded-xl xl:mx-8 p-20 xl:px-32 px-5 drop-shadow-md">
         {/* UpperDashboard ==========================================*/}
         <UpperDashboard lang={lang} />

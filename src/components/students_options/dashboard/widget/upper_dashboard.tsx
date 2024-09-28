@@ -13,15 +13,11 @@ import { useTranslation } from "react-i18next";
 
 interface Student {
   id?: string;
-  firstName: string;
-  lastName: string;
+  studentName: string;
   birthDate: string;
-  grade: string;
-  gender: string;
+  collegeMajor: string;
   country: string;
-  city: string;
   phone: string;
-  remarks: string;
 }
 
 interface StudentsDataProps {
@@ -81,15 +77,11 @@ const UpperDashboard: React.FC<StudentsDataProps> = ({ lang }) => {
       await axios.post(
         "https://taxiapp.easybooks.me:8283/Student/Add",
         {
-          firstName: studentData.firstName,
-          lastName: studentData.lastName,
+          studentName: studentData.studentName,
           birthDate: studentData.birthDate,
-          grade: studentData.grade,
-          gender: studentData.gender,
+          collegeMajor: studentData.collegeMajor,
           country: studentData.country,
-          city: studentData.city,
           phone: studentData.phone,
-          remarks: studentData.remarks,
         },
         {
           headers: {
@@ -114,15 +106,11 @@ const UpperDashboard: React.FC<StudentsDataProps> = ({ lang }) => {
       await axios.put(
         "https://taxiapp.easybooks.me:8283/Student/Edit",
         {
-          firstName: updatedStudentData.firstName,
-          lastName: updatedStudentData.lastName,
+          studentName: updatedStudentData.studentName,
           birthDate: updatedStudentData.birthDate,
-          grade: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-          gender: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+          collegeMajor: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
           country: updatedStudentData.country,
-          city: updatedStudentData.city,
           phone: updatedStudentData.phone,
-          remarks: updatedStudentData.remarks,
           id: updatedStudentData.id,
         },
         {

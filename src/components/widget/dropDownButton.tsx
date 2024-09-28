@@ -30,16 +30,16 @@ const DropDownButton: React.FC<DropDownButtonProps> = ({
   };
 
   return (
-    <div className="relative">
+    <div onClick={toggleDropdown} className="relative cursor-pointer">
       {/* ========= Show loading <3======== */}
       {isLoading && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-          <div className="w-10 h-10 border-4 border-t-primary border-gray-300 rounded-full animate-spin"></div>
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-80 z-50">
+          <div className="w-14 h-14 border-8 border-t-primary border-gray-300 rounded-full animate-spin"></div>
         </div>
       )}
 
-      <div className="text-white xl:text-lg text-md min-w-28 px-4 py-2 bg-primary rounded-lg flex justify-center items-center gap-2">
-        <button onClick={toggleDropdown}>{selectedLanguage}</button>
+      <div className="text-white xl:text-lg text-md min-w-28 px-4 py-2 hover:scale-95 duration-300 bg-primary rounded-lg flex justify-center items-center gap-2">
+        <button>{selectedLanguage}</button>
 
         <IoIosArrowDown />
       </div>

@@ -9,10 +9,16 @@ import research from "../../../assets/images/research.png";
 import science from "../../../assets/images/science-book.png";
 import end from "../../../assets/images/eng.png";
 
+type Subject = {
+  name: string;
+  hours: number;
+  doctor: string;
+};
+
 type Major = {
   name: string;
   imageUrl: string;
-  subjects: string[];
+  subjects: Subject[];
 };
 
 interface coursesLanguage {
@@ -25,8 +31,8 @@ const studentsPerSpecialty = [65, 5, 50, 15, 15, 20, 10, 20]; // Number of stude
 const GeneralCourses: React.FC<coursesLanguage> = ({ lang }) => {
   const navigate = useNavigate();
 
-  const handleNavigateClick = (subjects: string[]) => {
-    navigate("/students/subjects_course", { state: { subjects } });
+  const handleNavigateClick = (major: Major) => {
+    navigate("/students/subjects_course", { state: { major } });
   };
 
   const majors: Major[] = [
@@ -34,117 +40,140 @@ const GeneralCourses: React.FC<coursesLanguage> = ({ lang }) => {
       name: lang === "en" ? "Computer Science" : "علوم الحاسب",
       imageUrl: desktop,
       subjects: [
-        "Data Structures and Algorithms",
-        "Operating Systems",
-        "Database Systems",
-        "Artificial Intelligence",
-        "Computer Networks",
-        "Software Engineering",
-        "Web Development",
-        "Cybersecurity",
+        {
+          name: "Data Structures and Algorithms",
+          hours: 4,
+          doctor: "Doctor A",
+        },
+        { name: "Operating Systems", hours: 3, doctor: "Doctor B" },
+        { name: "Database Systems", hours: 8, doctor: "Doctor C" },
+        { name: "Artificial Intelligence", hours: 4, doctor: "Doctor D" },
+        { name: "Computer Networks", hours: 3, doctor: "Doctor E" },
+        { name: "Software Engineering", hours: 8, doctor: "Doctor F" },
+        { name: "Web Development", hours: 3, doctor: "Doctor G" },
+        { name: "Cybersecurity", hours: 4, doctor: "Doctor H" },
       ],
     },
     {
       name: lang === "en" ? "Mechanical Engineering" : "هندسة ميكانيكية",
       imageUrl: engineering,
       subjects: [
-        "Thermodynamics",
-        "Fluid Mechanics",
-        "Mechanics of Materials",
-        "Machine Design",
-        "Robotics",
-        "Heat Transfer",
-        "Engineering Materials",
-        "Manufacturing Processes",
+        { name: "Thermodynamics", hours: 3, doctor: "Doctor A" },
+        { name: "Fluid Mechanics", hours: 4, doctor: "Doctor B" },
+        { name: "Mechanics of Materials", hours: 8, doctor: "Doctor C" },
+        { name: "Machine Design", hours: 4, doctor: "Doctor D" },
+        { name: "Robotics", hours: 3, doctor: "Doctor E" },
+        { name: "Heat Transfer", hours: 4, doctor: "Doctor F" },
+        { name: "Engineering Materials", hours: 8, doctor: "Doctor G" },
+        { name: "Manufacturing Processes", hours: 3, doctor: "Doctor H" },
       ],
     },
     {
       name: lang === "en" ? "Business Administration" : "إدارة أعمال",
       imageUrl: briefcase,
       subjects: [
-        "Principles of Management",
-        "Marketing",
-        "Business Law",
-        "Financial Accounting",
-        "Human Resource Management",
-        "Organizational Behavior",
-        "Strategic Management",
-        "Entrepreneurship",
+        { name: "Principles of Management", hours: 4, doctor: "Doctor A" },
+        { name: "Marketing", hours: 3, doctor: "Doctor B" },
+        { name: "Business Law", hours: 8, doctor: "Doctor C" },
+        { name: "Financial Accounting", hours: 4, doctor: "Doctor D" },
+        { name: "Human Resource Management", hours: 3, doctor: "Doctor E" },
+        { name: "Organizational Behavior", hours: 4, doctor: "Doctor F" },
+        { name: "Strategic Management", hours: 8, doctor: "Doctor G" },
+        { name: "Entrepreneurship", hours: 3, doctor: "Doctor H" },
       ],
     },
     {
       name: lang === "en" ? "Electrical Engineering" : "الهندسة الكهربائية",
       imageUrl: gear,
       subjects: [
-        "Circuit Analysis",
-        "Digital Signal Processing",
-        "Electromagnetic Fields",
-        "Power Systems",
-        "Microelectronics",
-        "Control Systems",
-        "Analog Electronics",
-        "Renewable Energy Systems",
+        { name: "Circuit Analysis", hours: 4, doctor: "Doctor A" },
+        { name: "Digital Signal Processing", hours: 4, doctor: "Doctor B" },
+        { name: "Electromagnetic Fields", hours: 8, doctor: "Doctor C" },
+        { name: "Power Systems", hours: 4, doctor: "Doctor D" },
+        { name: "Microelectronics", hours: 4, doctor: "Doctor E" },
+        { name: "Control Systems", hours: 3, doctor: "Doctor F" },
+        { name: "Analog Electronics", hours: 4, doctor: "Doctor G" },
+        { name: "Renewable Energy Systems", hours: 3, doctor: "Doctor H" },
       ],
     },
     {
-      name: lang === "en" ? "psychology" : "علم النفس",
-
+      name: lang === "en" ? "Psychology" : "علم النفس",
       imageUrl: research,
       subjects: [
-        "Cognitive Psychology",
-        "Developmental Psychology",
-        "Abnormal Psychology",
-        "Social Psychology",
-        "Behavioral Neuroscience",
-        "Research Methods in Psychology",
-        "Clinical Psychology",
-        "Psychological Testing and Assessment",
+        { name: "Cognitive Psychology", hours: 3, doctor: "Doctor A" },
+        { name: "Developmental Psychology", hours: 4, doctor: "Doctor B" },
+        { name: "Abnormal Psychology", hours: 8, doctor: "Doctor C" },
+        { name: "Social Psychology", hours: 4, doctor: "Doctor D" },
+        { name: "Behavioral Neuroscience", hours: 4, doctor: "Doctor E" },
+        {
+          name: "Research Methods in Psychology",
+          hours: 3,
+          doctor: "Doctor F",
+        },
+        { name: "Clinical Psychology", hours: 8, doctor: "Doctor G" },
+        {
+          name: "Psychological Testing and Assessment",
+          hours: 4,
+          doctor: "Doctor H",
+        },
       ],
     },
     {
-      name: lang === "en" ? "English" : " لغة انجليزية",
+      name: lang === "en" ? "English" : "لغة انجليزية",
       imageUrl: end,
       subjects: [
-        "Introduction to Literature",
-        "Shakespearean Studies",
-        "Creative Writing",
-        "Literary Theory",
-        "American Literature",
-        "Postcolonial Literature",
-        "English Grammar and Linguistics",
-        "Modern Poetry",
+        { name: "Introduction to Literature", hours: 4, doctor: "Doctor A" },
+        { name: "Shakespearean Studies", hours: 3, doctor: "Doctor B" },
+        { name: "Creative Writing", hours: 4, doctor: "Doctor C" },
+        { name: "Literary Theory", hours: 4, doctor: "Doctor D" },
+        { name: "American Literature", hours: 3, doctor: "Doctor E" },
+        { name: "Postcolonial Literature", hours: 8, doctor: "Doctor F" },
+        {
+          name: "English Grammar and Linguistics",
+          hours: 4,
+          doctor: "Doctor G",
+        },
+        { name: "Modern Poetry", hours: 3, doctor: "Doctor H" },
       ],
     },
-
     {
       name: lang === "en" ? "Environmental Science" : "العلوم البيئية",
       imageUrl: science,
       subjects: [
-        "Environmental Chemistry",
-        "Ecology and Conservation",
-        "Environmental Policy",
-        "Climate Change",
-        "Renewable Energy",
-        "Environmental Impact Assessment",
-        "Geographic Information Systems (GIS)",
-        "Natural Resource Management",
+        { name: "Environmental Chemistry", hours: 4, doctor: "Doctor A" },
+        { name: "Ecology and Conservation", hours: 3, doctor: "Doctor B" },
+        { name: "Environmental Policy", hours: 4, doctor: "Doctor C" },
+        { name: "Climate Change", hours: 8, doctor: "Doctor D" },
+        { name: "Renewable Energy", hours: 3, doctor: "Doctor E" },
+        {
+          name: "Environmental Impact Assessment",
+          hours: 4,
+          doctor: "Doctor F",
+        },
+        {
+          name: "Geographic Information Systems (GIS)",
+          hours: 4,
+          doctor: "Doctor G",
+        },
+        { name: "Natural Resource Management", hours: 3, doctor: "Doctor H" },
       ],
     },
     {
       name: lang === "en" ? "Fine Arts" : "الفنون الجميلة",
       imageUrl: palette,
       subjects: [
-        "Drawing and Painting",
-        "Art History",
-        "Sculpture",
-        "Digital Media",
-        "Photography",
-        "Printmaking",
-        "Ceramics",
-        "Contemporary Art Theory",
+        { name: "Drawing and Painting", hours: 3, doctor: "Doctor A" },
+        { name: "Art History", hours: 4, doctor: "Doctor B" },
+        { name: "Sculpture", hours: 8, doctor: "Doctor C" },
+        { name: "Digital Media", hours: 4, doctor: "Doctor D" },
+        { name: "Photography", hours: 4, doctor: "Doctor E" },
+        { name: "Printmaking", hours: 3, doctor: "Doctor F" },
+        { name: "Ceramics", hours: 4, doctor: "Doctor G" },
+        { name: "Contemporary Art Theory", hours: 4, doctor: "Doctor H" },
       ],
     },
   ];
+
   return (
     <div
       className="flex justify-center gap-5"
@@ -163,11 +192,11 @@ const GeneralCourses: React.FC<coursesLanguage> = ({ lang }) => {
               <img src={items.imageUrl} alt={university} className="w-24" />
               <p className="sm:text-lg text-xl">{items.name}</p>
               <button
-                onClick={() => handleNavigateClick(items.subjects)}
+                onClick={() => handleNavigateClick(items)}
                 className="group bg-background text-xl px-10 py-1.5 rounded-lg shadowing hover:bg-primary duration-300"
               >
                 <p className="text-white opacity-60 group-hover:opacity-100 duration-200">
-                  Courses
+                  {lang === "en" ? "Courses" : "الدورات"}
                 </p>
               </button>
             </div>
