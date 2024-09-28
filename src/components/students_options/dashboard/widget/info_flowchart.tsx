@@ -9,6 +9,7 @@ import {
   Legend,
   ArcElement,
 } from "chart.js";
+import { useState } from "react";
 
 ChartJS.register(
   CategoryScale,
@@ -20,8 +21,22 @@ ChartJS.register(
   ArcElement
 );
 
+const predefinedColors = [
+  'red',
+  'lightblue',
+  'lime',
+  'green',
+  'orange',
+  'pink'
+];
+
 const InfoFlowChart = () => {
-  // Sample data for the "Counties" chart
+  const getCycledColors = (count: number) => {
+    return Array(count).fill('').map((_, index) => predefinedColors[index % predefinedColors.length]);
+  };
+
+  
+  //  "Counties" chart
   const countriesData = {
     labels: [
       "Country A",
@@ -36,31 +51,32 @@ const InfoFlowChart = () => {
       {
         label: "Population",
         data: [1200, 1900, 3000, 2200, 400, 400],
-        backgroundColor: "rgba(75, 192, 192, 0.6)",
+        backgroundColor: getCycledColors(7), 
+        borderColor: getCycledColors(7),
       },
     ],
   };
 
-  // Sample data for the "College Majors" chart
+  //  "College Majors" chart
   const majorsData = {
     labels: ["Engineering", "Business", "Arts"],
     datasets: [
       {
         label: "Students Enrolled",
         data: [500, 700, 300],
-        backgroundColor: ["#FF6384", "#36A2EB", "#FFCE56"],
+        backgroundColor: ['#124435', "#124435"],
       },
     ],
   };
 
   return (
-    <div className="flex justify-center items-center gap-10 mx-10 mb-5 ">
+    <div className="flex justify-start items-center gap-5 mx-10 mb-5 ">
       {/* Bar chart for Counties */}
-      <div className="h-smallH w-1/3 bg-darkColor flex justify-center items-center p-4 rounded-2xl">
+      <div className="h-smallH w-3/4 bg-darkColor flex justify-center items-center p-4 rounded-2xl">
         <Bar data={countriesData} options={{ maintainAspectRatio: false }} />
       </div>
       {/* Pie chart for College Majors */}
-      <div className="h-smallH w-1/4 bg-darkColor flex justify-center items-center p-4 rounded-2xl">
+      <div className="h-smallH w-1/3 bg-darkColor flex justify-center items-center p-10 rounded-2xl">
         <Doughnut data={majorsData} options={{ maintainAspectRatio: false }} />
       </div>
     </div>
